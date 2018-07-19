@@ -367,7 +367,7 @@ temporarily making the buffer local value global."
 				     " Projectile"
 				   (format " Projectile[%s]"
 					   (projectile-project-name))))))
-  ;; Fix slowness for remote projects accesed with tramp  
+  ;; Fix slowness for remote projects accesed with tramp
   (defadvice projectile-project-root (around ignore-remote first activate)
      (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
