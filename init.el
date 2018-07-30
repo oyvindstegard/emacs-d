@@ -356,6 +356,7 @@ temporarily making the buffer local value global."
 
 (use-package projectile
   :ensure t
+  :init (setq projectile-keymap-prefix (kbd "C-c p"))
   :config
   (projectile-mode 1)
   (setq projectile-completion-system 'ido
