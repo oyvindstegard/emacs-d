@@ -386,7 +386,7 @@ temporarily making the buffer local value global."
                  '(".*COMMIT_EDITMSG". ((display-buffer-pop-up-window) .
                                         ((inhibit-same-window . t)))))
   (setq magit-last-seen-setup-instructions "1.4.0"
-	magit-repository-directories '("~/Prosjekter" "~/dev" "~/.emacs.d")
+	magit-repository-directories '(("~/Prosjekter" . 1) ("~/dev" . 1) ("~/.emacs.d" . 0))
         magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
   (push "-x" magit-cherry-pick-arguments))
 
