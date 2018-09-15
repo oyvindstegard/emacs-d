@@ -151,6 +151,9 @@
   :defer t
   :config (setq nsm-settings-file (concat user-emacs-directory "cache/network-security.data")))
 
+(use-package autorevert
+  :config (setq auto-revert-remote-files t))
+
 (use-package mycommands
   :bind
   (("C-c n" . show-buffer-file-name)
