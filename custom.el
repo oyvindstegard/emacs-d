@@ -9,7 +9,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org-bullets org-plus-contrib magit projectile restclient yaml-mode php-mode cider sbt-mode scala-mode web-mode dockerfile-mode markdown-mode json-mode buffer-move ace-jump-mode ace-window use-package))))
+    (hydra org-bullets org-plus-contrib magit projectile restclient yaml-mode php-mode cider sbt-mode scala-mode web-mode dockerfile-mode markdown-mode json-mode buffer-move ace-jump-mode ace-window use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

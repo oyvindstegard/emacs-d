@@ -337,12 +337,7 @@ temporarily making the buffer local value global."
 
 ;; Testing hydra
 (use-package hydra
-  :ensure t
-  :disabled
-  :config
-  (defhydra hydra-resize-window (global-map "C-x")
-    "Resize window"
-    ("^" enlarge-window "Enlarge")))
+  :ensure t)
 
 (use-package php-mode
   :ensure t
