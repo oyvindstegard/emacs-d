@@ -72,6 +72,8 @@
                                            (file-truename (concat user-emacs-directory "init.el")))
                                     (kill-buffer)
                                   (find-file (concat user-emacs-directory "init.el")))))
+(global-set-key (kbd "C-M-\\") (lambda() (interactive) (message "Use M-i !")))
+
 (with-eval-after-load "isearch"
   (global-set-key (kbd "C-x 4 s")
 		  (lambda(&optional arg) "Isearch other window"
