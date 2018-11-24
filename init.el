@@ -359,16 +359,10 @@ temporarily making the buffer local value global."
   :init (setq projectile-keymap-prefix (kbd "C-c p"))
   :config
   (projectile-mode 1)
-  (setq projectile-completion-system 'ido
+  (setq projectile-project-search-path '("~/dev" "~/Prosjekter")
+        projectile-completion-system 'ido
 	projectile-cache-file (concat user-emacs-directory "cache/projectile.cache")
-	projectile-known-projects-file (concat user-emacs-directory "cache/projectile-bookmarks.eld")
-	projectile-mode-line '(:eval ; Fix slowness for remote projects accesed with tramp
-			       (when (projectile-project-p)
-				 (if (file-remote-p default-directory)
-				     " Projectile"
-				   (format " Projectile[%s]"
-					   (projectile-project-name))))))
-  ;; Fix slowness for remote projects accesed with tramp
+	projectile-known-projects-file (concat user-emacs-directory "cache/projectile-bookmarks.eld"))
   (defadvice projectile-project-root (around ignore-remote first activate)
      (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
