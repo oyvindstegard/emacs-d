@@ -105,8 +105,6 @@
       display-time-24hr-format t
       display-time-day-and-date t
       ps-paper-type 'a4
-      tab-width 4
-      fill-column 80
       undo-outer-limit 30000000
       large-file-warning-threshold 67108864
       message-log-max 10000
@@ -118,6 +116,9 @@
       set-mark-command-repeat-pop t
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t)
+(setq-default
+ fill-column 80
+ tab-width 4)
 
 ;; Packages (both internal and external)
 
