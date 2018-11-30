@@ -90,7 +90,9 @@
 (setenv "PAGER" "cat")
 (set-language-environment "UTF-8")
 (setq-default frame-title-format "%b  %f"
-              indent-tabs-mode nil)
+              indent-tabs-mode nil
+              tab-width 4
+              fill-column 80)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
@@ -116,9 +118,6 @@
       set-mark-command-repeat-pop t
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t)
-(setq-default
- fill-column 80
- tab-width 4)
 
 ;; Packages (both internal and external)
 
