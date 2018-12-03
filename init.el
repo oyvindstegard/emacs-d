@@ -422,6 +422,7 @@ temporarily making the buffer local value global."
 
 (use-package org
   :ensure org-plus-contrib
+  :ensure htmlize
   :init (setq org-modules '(org-info org-man ox-md ox-publish ox-icalendar ox-html))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
@@ -432,11 +433,15 @@ temporarily making the buffer local value global."
   :hook (org-mode . visual-line-mode)
   :config
   (org-load-modules-maybe t)
-  (setq org-directory "~/Dokumenter/org/"
-	org-default-notes-file (concat org-directory "notater.org")
+  (setq org-directory "~/org/"
+	org-default-notes-file (concat org-directory "index.org")
 	org-src-fontify-natively t
-        org-agenda-files (list org-default-notes-file)
-	org-hide-leading-stars t
+        org-agenda-files (list org-default-notes-file
+                               (concat org-directory "calendar.org")
+                               (concat org-directory "work.org"))
+	org-agenda-skip-unavailable-files t
+	org-hide-leading-stars nil
+        org-indent-mode-turns-on-hiding-stars nil
 	org-startup-indented t
 	org-odd-levels-only nil
 	org-catch-invisible-edits 'show-and-error
@@ -449,12 +454,10 @@ temporarily making the buffer local value global."
 	org-agenda-todo-ignore-scheduled 7
 	org-deadline-warning-days 7
 	org-agenda-todo-ignore-deadlines 30
-	org-tags-column -90
 	org-email-link-description-format "Epost %c: %.60s"
 	org-startup-align-all-tables t
 	org-special-ctrl-a/e t
 	org-publish-timestamp-directory (concat user-emacs-directory "cache/org-timestamps/")
-	org-agenda-skip-unavailable-files t
 	org-footnote-fill-after-inline-note-extraction nil
 	org-goto-auto-isearch t
 	org-enforce-todo-dependencies t
@@ -467,9 +470,11 @@ temporarily making the buffer local value global."
 					    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 	;; Global export settings
 	org-export-default-language "no"
+        org-export-use-babel nil
 	org-html-validation-link nil
-	org-html-htmlize-output-type 'inline-css
+	org-html-htmlize-output-type 'css
 	org-html-doctype "html5"
+        org-html-html5-fancy t
 	org-html-head-include-default-style nil)
   (defvar org-switchb-extra-org-paths nil
     "List of extra org paths (files or directories) that shall be
@@ -532,6 +537,7 @@ which shall not be autoloaded before org-switchb is invoked.")
 (use-package org-bullets
   :ensure t
   :after org
+  :disabled
   :hook (org-mode . org-bullets-mode)
   :config (setq org-bullets-bullet-list '("•")))
 
