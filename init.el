@@ -292,7 +292,8 @@ temporarily making the buffer local value global."
 
 (use-package tramp
   :defer t
-  :config (setq tramp-persistency-file-name (concat user-emacs-directory "cache/tramp")))
+  :config (setq tramp-persistency-file-name (concat user-emacs-directory "cache/tramp")
+                tramp-verbose 2))
 
 (use-package json-mode
   :defer t
@@ -431,7 +432,7 @@ temporarily making the buffer local value global."
 	 ("C-c o a" . org-agenda)
 	 ("C-c o b" . org-switchb)
 	 ("C-c o r" . org-capture)
-     ("C-c o n" . (lambda() (interactive) (find-file org-default-notes-file))))
+     ("C-c o o" . (lambda() (interactive) (find-file org-default-notes-file))))
   :hook (org-mode . visual-line-mode)
   :config
   (org-load-modules-maybe t)
@@ -485,20 +486,28 @@ searched for org files to auto-visit before `org-switchb'.")
     "List of regular expressions matched against file paths
 which shall not be autoloaded before org-switchb is invoked.")
 
-  (setq org-switchb-autoload-exclude-patterns '("Adr[^/]*\.org$" ".*[mM]al[^/]*.org" "sitemap.org"))
+  (defvar org-switchb-only-include-agenda-files nil
+    "Whether to only include angenda files when initially calling org-switchb")
 
-  ;; Make sure org-files are loaded when org-switchb is invoked.
+  (setq org-switchb-autoload-exclude-patterns '("Adr[^/]*\.org$" ".*[mM]al[^/]*.org" "sitemap.org")
+        org-switchb-only-include-agenda-files t)
+
+  ;; Make sure desired org-files are automatically loaded when org-switchb is invoked
   (require 'find-lisp)
   (defadvice org-switchb (before org-switchb-DE-BEFORE activate)
-    (let ((org-paths (delete-duplicates
-		      (cons org-directory
-			    (append 
-			     (when (listp org-agenda-files) org-agenda-files)
-			     org-switchb-extra-org-paths)) :test 'equal))
+    (let ((org-paths
+           (delete-duplicates
+            (append
+             (when (listp org-agenda-files) org-agenda-files)
+             (when (not org-switchb-only-include-agenda-files) (list org-directory))
+             (when (not org-switchb-only-include-agenda-files) org-switchb-extra-org-paths))
+            :test 'equal))
 	  org-files)
       (while org-paths
 	(cond
-	 ((file-directory-p (car org-paths))
+	 ((and (file-directory-p (car org-paths)) org-switchb-only-include-agenda-files)
+      (mapc (lambda(file) (push file org-files)) (directory-files (car org-paths) t "\\.org$")))
+     ((file-directory-p (car org-paths))
 	  (ignore-errors
 	    (mapc (lambda(file) (push file org-files)) (find-lisp-find-files (car org-paths) "\\.org$"))))
 	 ((file-regular-p (car org-paths)) (push (car org-paths) org-files)))
