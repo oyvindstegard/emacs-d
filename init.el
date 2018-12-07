@@ -128,7 +128,13 @@
   :config
   (setq save-place-file (concat user-emacs-directory "cache/places"))
   (save-place-mode 1))
-  
+
+(use-package savehist
+  :defer 4
+  :config
+  (setq savehist-file (concat user-emacs-directory "cache/minibuffer-history"))
+  (savehist-mode))
+
 (use-package recentf
   :defer nil
   :bind ("C-x C-r" . recentf-open-files)
@@ -454,7 +460,7 @@ temporarily making the buffer local value global."
    org-agenda-skip-scheduled-if-deadline-is-shown t
    org-agenda-default-appointment-duration 60
    org-agenda-todo-ignore-scheduled 7
-   org-deadline-warning-days 7
+   org-deadline-warning-days 2
    org-agenda-todo-ignore-deadlines 30
    org-email-link-description-format "Epost %c: %.60s"
    org-startup-align-all-tables t
@@ -489,7 +495,7 @@ which shall not be autoloaded before org-switchb is invoked.")
   (defvar org-switchb-only-include-agenda-files nil
     "Whether to only include angenda files when initially calling org-switchb")
 
-  (setq org-switchb-autoload-exclude-patterns '("Adr[^/]*\.org$" ".*[mM]al[^/]*.org" "sitemap.org")
+  (setq org-switchb-autoload-exclude-patterns '("gcal/[^/]*\\.org" ".*[mM]al[^/]*.org" "sitemap.org")
         org-switchb-only-include-agenda-files t)
 
   ;; Make sure desired org-files are automatically loaded when org-switchb is invoked
