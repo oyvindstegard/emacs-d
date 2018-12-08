@@ -430,7 +430,10 @@ temporarily making the buffer local value global."
 (use-package org
   :ensure org-plus-contrib
   :ensure htmlize
-  :init (setq org-directory "~/org/"
+  :init
+  (defvar org-directory-local-override nil
+    "Override default `org-directory' by local configuration.")
+  (setq org-directory "~/org/"
               org-default-notes-file (concat org-directory "index.org")
               org-modules '(org-info org-man ox-md ox-publish ox-icalendar ox-html))
   :mode ("\\.org\\'" . org-mode)
@@ -438,11 +441,13 @@ temporarily making the buffer local value global."
 	 ("C-c o a" . org-agenda)
 	 ("C-c o b" . org-switchb)
 	 ("C-c o r" . org-capture)
-     ("C-c o o" . (lambda() (interactive) (find-file org-default-notes-file))))
+     ("C-c o o" . (lambda() (interactive) (require 'org) (find-file org-default-notes-file))))
   :hook (org-mode . visual-line-mode)
   :config
   (org-load-modules-maybe t)
-  (setq 
+  (setq
+   org-directory (or org-directory-local-override org-directory)
+   org-default-notes-file (concat org-directory "index.org")
    org-src-fontify-natively t
    org-agenda-files (list org-default-notes-file
                           (concat org-directory "calendar.org")
