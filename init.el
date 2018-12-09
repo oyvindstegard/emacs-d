@@ -139,9 +139,9 @@
   :defer nil
   :bind ("C-x C-r" . recentf-open-files)
   :config
-  (setq recentf-max-saved-items 200
+  (setq recentf-max-saved-items 50
         recentf-max-menu-items 20
-	recentf-save-file (concat user-emacs-directory "cache/recentf")
+	    recentf-save-file (concat user-emacs-directory "cache/recentf")
         recentf-exclude '("Privat"))
   (recentf-mode 1))
 
