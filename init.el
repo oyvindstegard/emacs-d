@@ -472,7 +472,7 @@ temporarily making the buffer local value global."
    org-agenda-skip-scheduled-if-deadline-is-shown t
    org-agenda-default-appointment-duration 60
    org-agenda-todo-ignore-scheduled 7
-   org-deadline-warning-days 2
+   org-deadline-warning-days 4
    org-agenda-todo-ignore-deadlines 30
    org-email-link-description-format "Epost %c: %.60s"
    org-startup-align-all-tables t
