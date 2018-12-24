@@ -11,16 +11,21 @@
       initial-scratch-message ";; Ready\n\n"
       custom-file (concat user-emacs-directory "custom.el")
       local-init-file (concat user-emacs-directory "local.el")
+      user-cache-directory (concat user-emacs-directory "cache/")
       package-archives '(("org" . "http://orgmode.org/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.org/packages/"))
       package-enable-at-startup nil)     ; Prevent second run of (package-initialize) after init
+
+(make-directory user-cache-directory t)
 
 ;; Prune builtin [and usually obsolete] org-mode from lisp load-path:
 (eval-when-compile (require 'cl))
 (setq load-path
       (remove-if
        (lambda(path)(string-match "/.*share/emacs/.*/lisp/org$" path)) load-path))
+
+;; Custom libs
 (push (concat user-emacs-directory "el") load-path)
 (require 'myfuncs)
 
@@ -34,6 +39,7 @@
         (height . 62)
         (width . 114))
       default-frame-alist initial-frame-alist)
+
 
 (when (display-graphic-p)
   (cond
@@ -126,13 +132,13 @@
 
 (use-package saveplace
   :config
-  (setq save-place-file (concat user-emacs-directory "cache/places"))
+  (setq save-place-file (concat user-cache-directory "places"))
   (save-place-mode 1))
 
 (use-package savehist
   :defer 4
   :config
-  (setq savehist-file (concat user-emacs-directory "cache/minibuffer-history"))
+  (setq savehist-file (concat user-cache-directory "minibuffer-history"))
   (savehist-mode))
 
 (use-package recentf
@@ -141,7 +147,7 @@
   :config
   (setq recentf-max-saved-items 50
         recentf-max-menu-items 20
-	    recentf-save-file (concat user-emacs-directory "cache/recentf")
+	    recentf-save-file (concat user-cache-directory "recentf")
         recentf-exclude '("Privat"))
   (recentf-mode 1))
 
@@ -149,7 +155,7 @@
   :defer t
   :config
   (setq bookmark-bmenu-file-column 60
-	bookmark-default-file (concat user-emacs-directory "cache/bookmarks.bmk")))
+	bookmark-default-file (concat user-cache-directory "bookmarks.bmk")))
 
 (use-package man
   :defer t
@@ -157,7 +163,7 @@
 
 (use-package nsm
   :defer t
-  :config (setq nsm-settings-file (concat user-emacs-directory "cache/network-security.data")))
+  :config (setq nsm-settings-file (concat user-cache-directory "network-security.data")))
 
 (use-package autorevert
   :config (setq auto-revert-remote-files t))
@@ -298,7 +304,7 @@ temporarily making the buffer local value global."
 
 (use-package tramp
   :defer t
-  :config (setq tramp-persistency-file-name (concat user-emacs-directory "cache/tramp")
+  :config (setq tramp-persistency-file-name (concat user-cache-directory "tramp")
                 tramp-verbose 2))
 
 (use-package json-mode
@@ -368,8 +374,8 @@ temporarily making the buffer local value global."
   (projectile-mode 1)
   (setq projectile-project-search-path '("~/dev" "~/Prosjekter")
         projectile-completion-system 'ido
-	projectile-cache-file (concat user-emacs-directory "cache/projectile.cache")
-	projectile-known-projects-file (concat user-emacs-directory "cache/projectile-bookmarks.eld"))
+	projectile-cache-file (concat user-cache-directory "projectile.cache")
+	projectile-known-projects-file (concat user-cache-directory "projectile-bookmarks.eld"))
   (defadvice projectile-project-root (around ignore-remote first activate)
      (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
@@ -393,7 +399,7 @@ temporarily making the buffer local value global."
 
 (use-package sql
   :defer t
-  :config (setq sql-input-ring-file-name (concat user-emacs-directory "cache/sql-history")
+  :config (setq sql-input-ring-file-name (concat user-cache-directory "sql-history")
 		sql-mysql-options '("--silent")))
 
 (use-package cc-mode
@@ -477,7 +483,7 @@ temporarily making the buffer local value global."
    org-email-link-description-format "Epost %c: %.60s"
    org-startup-align-all-tables t
    org-special-ctrl-a/e t
-   org-publish-timestamp-directory (concat user-emacs-directory "cache/org-timestamps/")
+   org-publish-timestamp-directory (concat user-cache-directory "org-timestamps/")
    org-footnote-fill-after-inline-note-extraction nil
    org-goto-auto-isearch t
    org-enforce-todo-dependencies t
