@@ -394,8 +394,10 @@ temporarily making the buffer local value global."
                                         ((inhibit-same-window . t)))))
   (setq magit-last-seen-setup-instructions "1.4.0"
 	magit-repository-directories '(("~/Prosjekter" . 1) ("~/dev" . 1) ("~/.emacs.d" . 0))
-        magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
-  (push "-x" magit-cherry-pick-arguments))
+    magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
+  ;; TODO this option no longer exists in recent Magit versions, find out how to set it:
+  ;(push "-x" magit-cherry-pick-arguments)
+  )
 
 (use-package sql
   :defer t
