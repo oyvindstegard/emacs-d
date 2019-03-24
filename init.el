@@ -381,6 +381,14 @@ temporarily making the buffer local value global."
   (push "jabber-.*" projectile-globally-ignored-modes)
   (push "rcirc" projectile-globally-ignored-modes))
 
+;; transient is used by magit
+(use-package transient
+  :defer t
+  :config
+  (setq transient-levels-file (concat user-cache-directory "transient/levels.el")
+        transient-history-file (concat user-cache-directory "transient/history.el")
+        transient-values-file (concat user-cache-directory "transient/values.el")))
+
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)
