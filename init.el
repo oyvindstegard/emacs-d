@@ -474,7 +474,8 @@ temporarily making the buffer local value global."
    org-src-fontify-natively t
    org-agenda-files (list org-default-notes-file
                           (concat org-directory "calendar.org")
-                          (concat org-directory "work.org"))
+                          (concat org-directory "work.org")
+                          (concat org-directory "notes.org"))
    org-agenda-skip-unavailable-files t
    org-hide-leading-stars nil
    org-indent-mode-turns-on-hiding-stars nil
