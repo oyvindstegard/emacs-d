@@ -370,12 +370,12 @@ temporarily making the buffer local value global."
 (use-package projectile
   :ensure t
   :init (setq projectile-keymap-prefix (kbd "C-c p"))
+  (setq projectile-project-search-path '("~/dev")
+        projectile-completion-system 'ido
+        projectile-cache-file (concat user-cache-directory "projectile.cache")
+        projectile-known-projects-file (concat user-cache-directory "projectile-bookmarks.eld"))
   :config
   (projectile-mode 1)
-  (setq projectile-project-search-path '("~/dev" "~/Prosjekter")
-        projectile-completion-system 'ido
-	projectile-cache-file (concat user-cache-directory "projectile.cache")
-	projectile-known-projects-file (concat user-cache-directory "projectile-bookmarks.eld"))
   (defadvice projectile-project-root (around ignore-remote first activate)
      (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
