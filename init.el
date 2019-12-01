@@ -35,7 +35,7 @@
       '((tool-bar-lines . 0)
 	(vertical-scroll-bars . nil)
 	(horizontal-scroll-bars . nil)
-        (menu-bar-lines . 1)
+        (menu-bar-lines . 0)
         (height . 62)
         (width . 114))
       default-frame-alist initial-frame-alist)
