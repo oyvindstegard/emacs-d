@@ -336,11 +336,7 @@ temporarily making the buffer local value global."
   :defer t
   :config (remove-hook 'log-edit-hook 'log-edit-insert-message-template))
 
-(use-package scala-mode
-  :ensure t
-  :defer t)
-
-(use-package sbt-mode
+(use-package groovy-mode
   :ensure t
   :defer t)
 
