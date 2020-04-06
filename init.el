@@ -44,7 +44,7 @@
 (when (display-graphic-p)
   (cond
    ((and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID")))
-    (setq initial-frame-alist (cons '(font . "Ubuntu Mono 12") initial-frame-alist)
+    (setq initial-frame-alist (cons '(font . "Ubuntu Mono 11") initial-frame-alist)
 	  default-frame-alist initial-frame-alist))
    ((eq system-type 'windows-nt)
     (setq initial-frame-alist (cons '(font . "Consolas 10") initial-frame-alist)
