@@ -40,13 +40,16 @@
         (width . 114))
       default-frame-alist initial-frame-alist)
 
-
 (when (display-graphic-p)
   (cond
-   ((and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID")))
-    (setq initial-frame-alist (cons '(font . "Ubuntu Mono 11") initial-frame-alist)
-	  default-frame-alist initial-frame-alist))
-   ((eq system-type 'windows-nt)
+   ((and
+     (eq system-type 'gnu/linux)
+     (equal "ubuntu" (linux-os-release-field "ID")))
+    ;; Set using theme or customize instead:
+    ;; (setq initial-frame-alist (cons '(font . "Ubuntu Mono 11") initial-frame-alist)
+    ;;       default-frame-alist initial-frame-alist))
+    )
+   ((EQ system-type 'windows-nt)
     (setq initial-frame-alist (cons '(font . "Consolas 10") initial-frame-alist)
 	  default-frame-alist initial-frame-alist))))
 
@@ -60,7 +63,9 @@
 
 ;; Apply visual theme
 (setq custom-theme-directory (concat user-emacs-directory "themes"))
-(load-theme 'nav t)
+(use-package gruvbox-theme
+  :ensure t
+  :config (load-theme 'gruvbox-dark-hard t))
 
 ;; Preferences
 (fset 'yes-or-no-p 'y-or-n-p)              ; Write "y" instead of "yes <RET>"
