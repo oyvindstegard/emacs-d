@@ -371,8 +371,9 @@ temporarily making the buffer local value global."
 (use-package projectile
   :ensure t
   :init (setq projectile-keymap-prefix (kbd "C-c p"))
-  (setq projectile-project-search-path '("~/dev")
-        projectile-completion-system 'ido
+  (when (file-directory-p "~/dev")
+    (setq projectile-project-search-path '("~/dev")))
+  (setq projectile-completion-system 'ido
         projectile-cache-file (concat user-cache-directory "projectile.cache")
         projectile-known-projects-file (concat user-cache-directory "projectile-bookmarks.eld"))
   :config
