@@ -453,7 +453,7 @@ temporarily making the buffer local value global."
     "Override default `org-directory' by local configuration.")
   (setq org-directory "~/org/"
               org-default-notes-file (concat org-directory "index.org")
-              org-modules '(org-info org-man ox-md ox-publish ox-icalendar ox-html))
+              org-modules '(ol-info ol-man ox-md ox-publish ox-icalendar ox-html))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
