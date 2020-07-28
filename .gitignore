@@ -12,6 +12,7 @@
 /games
 /eshell
 /local.el
+/local
 /custom.el
 /session.*
 /.org-id-locations
