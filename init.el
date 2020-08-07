@@ -239,9 +239,10 @@
 
 (use-package icomplete
   :custom
-  (icomplete-mode t)
   (icomplete-compute-delay 0.1)
-  (icomplete-separator ", "))
+  (icomplete-separator ", ")
+  :config
+  (icomplete-mode 1))
 
 (use-package pcomplete
   :defer t
