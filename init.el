@@ -22,7 +22,7 @@
 	  default-frame-alist initial-frame-alist))))
 
 ;; Boot strap package and use-package
-(package-initialize)                    ; early-init.el sets package-enable-at-startup til nil
+(package-initialize)                    ; early-init.el sets package-enable-at-startup to nil
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
