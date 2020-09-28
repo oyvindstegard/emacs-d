@@ -17,7 +17,7 @@
     ;; (setq initial-frame-alist (cons '(font . "Ubuntu Mono 11") initial-frame-alist)
     ;;       default-frame-alist initial-frame-alist))
     )
-   ((EQ system-type 'windows-nt)
+   ((eq system-type 'windows-nt)
     (setq initial-frame-alist (cons '(font . "Consolas 10") initial-frame-alist)
 	  default-frame-alist initial-frame-alist))))
 
