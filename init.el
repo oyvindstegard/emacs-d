@@ -502,7 +502,7 @@ which shall not be autoloaded before org-switchb is invoked.")
   (require 'find-lisp)
   (defadvice org-switchb (before org-switchb-DE-BEFORE activate)
     (let ((org-paths
-           (delete-duplicates
+           (cl-delete-duplicates
             (append
              (when (listp org-agenda-files) org-agenda-files)
              (when (not org-switchb-only-include-agenda-files) (list org-directory))
