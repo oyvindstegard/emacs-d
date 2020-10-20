@@ -1,5 +1,6 @@
-;; tod.el - time of day stuff
-;; Functions I use as part of my work time logging setup.
+;;; tod.el - misc time stuff
+;;
+;; Functions I use as part of my work time logging.
 
 (defun tod-valid-time-p (hh-mm)
   "Check if time of day expression HH-MM is considered valid."
@@ -49,5 +50,31 @@ formatted correctly, then nil is returned."
 (defun tod-current-week()
   "Return current week (ISO) as a number."
   (string-to-number (format-time-string "%V")))
+
+(defun tod-parse-ddmm (ddmm &optional year)
+  (cond
+   ((string-match "^[0-9]\\{1,2\\}\\.[0-9]\\{1,2\\}$" ddmm)
+    (let* ((elts (split-string ddmm "\\."))
+           (year (or year (nth 5 (decode-time (current-time)))))
+           (day (string-to-number (car elts)))
+           (month (string-to-number (cadr elts))))
+      (encode-time `(0 0 0 ,day ,month ,year nil -1 nil))))
+   (t nil)))
+
+(defun tod-week-from-ddmm (ddmm &optional year)
+  "Parse day of month formatted as \"dd.mm\" using current year,
+return the week number as formatted by `format-time-string' with
+argument \"%V\". Optional number argument YEAR can override to
+specific year."
+  (let ((time (tod-parse-ddmm ddmm year)))
+    (if time (format-time-string "%V" time) nil)))
+
+(defun tod-dayname-from-ddmm (ddmm &optional year)
+  "Parse day of month formatted as \"dd.mm\" using current year,
+return the name of the day as formatted by `format-time-string'
+with argument \"%a\". Optional number argument YEAR can override
+to specific year."
+  (let ((time (tod-parse-ddmm ddmm year)))
+    (if time (format-time-string "%a" time) nil)))
 
 (provide 'tod)
