@@ -2,7 +2,8 @@
 
 Author: Øyvind Stegard <oyvind@stegard.net>
 
-Compatibility: GNU/Emacs 25.X and 26.X, primarily for Linux env.
+Compatibility: GNU/Emacs 25.X, 26.X and 27.X, primarily for Linux env, also used
+for plain terminal Emacs on WSL/Windows.
 
 Utilizes `use-package`, the Emacs package framework and avoids the customize
 facility, preferring to hand code all preferences in `init.el` and related
@@ -10,8 +11,9 @@ files. Any state saved by the Emacs customize framework is stored in
 `custom.el`. The file `local.el` is loaded if present and can contain host
 specific configuration.
 
-In general, the configuration should boot strap Emacs by automatically loading
-any packages missing, so the first startup can take some time.
+In general, the configuration should boot strap Emacs by automatically
+downloading and byte compiling any packages missing, so the first startup can
+take some time.
 
 
 # Code
