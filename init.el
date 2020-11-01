@@ -334,7 +334,7 @@ temporarily making the buffer local value global."
   :ensure t
   :commands (restclient-mode)
   :mode ("\\.restclient\\'" . restclient-mode)
-  :hook (restclient-mode . (lambda()(set (make-local-variable 'js-indent-level) 2)))
+  :hook (restclient-mode . (lambda() (set (make-local-variable 'js-indent-level) 2)))
   :bind (:map restclient-mode-map ("C-c C-f" . json-mode-beautify)))
 
 (use-package projectile
@@ -350,7 +350,14 @@ temporarily making the buffer local value global."
   (defadvice projectile-project-root (around ignore-remote first activate)
      (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
-  (push "rcirc" projectile-globally-ignored-modes))
+  (push "rcirc" projectile-globally-ignored-modes)
+  (setq projectile-switch-project-action 'neotree-projectile-action))
+
+(use-package neotree
+  :ensure t
+  :bind (([f8] . neotree-toggle))
+  :config
+  (setq neo-theme 'arrow))
 
 ;; transient is used by magit
 (use-package transient
