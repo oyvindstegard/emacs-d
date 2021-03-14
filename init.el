@@ -353,6 +353,10 @@ temporarily making the buffer local value global."
   (push "rcirc" projectile-globally-ignored-modes)
   (setq projectile-switch-project-action 'neotree-projectile-action))
 
+(use-package apache-mode
+  :ensure t
+  :commands (apache-mode))
+
 (use-package neotree
   :ensure t
   :bind (([f8] . neotree-toggle))
