@@ -152,6 +152,7 @@
              insert-date-string
              xml-pretty-print-region
              uniquify-region
+             base64-encode-region-no-break
              tail-view-mode))
 
 (use-package winner

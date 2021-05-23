@@ -108,6 +108,11 @@ indentation rules."
   (widen)
   nil)
 
+(defun base64-encode-region-no-break()
+  "Call `base64-encode-region' with optional arg no-break set to t."
+  (interactive)
+  (base64-encode-region (mark) (point) t))
+
 (defun tail-view-mode ()
   "Toggle `auto-revert-tail-mode' and `view-mode' for current buffer."
   (interactive)
