@@ -46,6 +46,7 @@
 (global-set-key (kbd "M-I") 'tab-to-tab-stop)
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
 (global-set-key (kbd "<f12>") 'save-buffers-kill-emacs)
+(global-set-key (kbd "<f9>") 'compile)
 (global-set-key (kbd "C-c i") (lambda() (interactive)
                                 (if (equal (buffer-file-name)
                                            (file-truename (concat user-emacs-directory "init.el")))
