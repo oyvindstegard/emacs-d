@@ -287,6 +287,11 @@ temporarily making the buffer local value global."
   :defer t
   :ensure t)
 
+(use-package js2-mode
+  :ensure t
+  :commands (js2-mode)
+  :mode ("\\.js\\'" . js2-mode))
+
 (use-package markdown-mode
   :ensure t
   :defer t
