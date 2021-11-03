@@ -285,7 +285,8 @@ temporarily making the buffer local value global."
 
 (use-package json-mode
   :defer t
-  :ensure t)
+  :ensure t
+  :mode ("\\.webmanifest\\'" . json-mode))
 
 (use-package js2-mode
   :ensure t
