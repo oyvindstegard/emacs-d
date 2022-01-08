@@ -39,6 +39,7 @@
 (set-face-background 'lazy-highlight "#960")
 (set-face-foreground 'lazy-highlight "#ccc")
 (set-face-foreground 'font-lock-comment-face "#cdad00")
+(set-face-foreground 'which-func "LightSkyBlue")
 
 ;; (setq custom-theme-directory (concat user-emacs-directory "themes"))
 ;; (use-package gruvbox-theme
