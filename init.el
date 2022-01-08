@@ -39,7 +39,6 @@
 (set-face-background 'lazy-highlight "#960")
 (set-face-foreground 'lazy-highlight "#ccc")
 (set-face-foreground 'font-lock-comment-face "#cdad00")
-(set-face-foreground 'which-func "LightSkyBlue")
 
 ;; (setq custom-theme-directory (concat user-emacs-directory "themes"))
 ;; (use-package gruvbox-theme
@@ -425,7 +424,9 @@ temporarily making the buffer local value global."
 
 (use-package which-func
   :defer 5
-  :config (which-function-mode 1))
+  :config
+  (which-function-mode 1)
+  (set-face-foreground 'which-func "LightSkyBlue"))
 
 (use-package paren
   :defer 5
