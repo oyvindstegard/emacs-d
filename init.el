@@ -446,8 +446,17 @@ temporarily making the buffer local value global."
 (use-package unfill-paragraph
   :bind ("M-Q" . unfill-paragraph))
 
+;; Unfortunately we need hacks to fetch latest org package instead of using org builtin.
+;; Prune builtin [and usually obsolete] org-mode from lisp load-path and as builtin package.
+;; https://github.com/jwiegley/use-package/issues/319
+(eval-when-compile (require 'cl-seq))
+(setq load-path
+      (cl-remove-if
+       (lambda(path)(string-match "/.*share/emacs/.*/lisp/org$" path)) load-path))
+(assq-delete-all 'org package--builtins)
+(assq-delete-all 'org package--builtin-versions)
 (use-package org
-  :ensure org-plus-contrib
+  :ensure t
   :ensure htmlize
   :init
   (defvar org-directory-local-override nil
@@ -578,16 +587,12 @@ which shall not be autoloaded before org-switchb is invoked.")
 				       ("april" . 4)("juni" . 6)("juli" . 7)
 				       ("august" . 8)("september" . 9)("oktober" . 10)
 				       ("november" . 11)("desember" . 12)
-				       ("mai" . 5)("okt" . 10)("des" . 12)))))
-  
-  )
+				       ("mai" . 5)("okt" . 10)("des" . 12))))))
 
-(use-package org-bullets
+(use-package org-superstar
   :ensure t
   :after org
-  :disabled
-  :hook (org-mode . org-bullets-mode)
-  :config (setq org-bullets-bullet-list '("•")))
+  :disabled)
 
 ;; custom.el
 (when (file-readable-p custom-file) (load custom-file))
