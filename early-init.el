@@ -16,6 +16,9 @@
                          ("melpa" . "https://melpa.org/packages/"))
       package-enable-at-startup nil)
 
+(defvar local-init-file-after-hook nil
+  "Hooks run after `local-init-file' has been loaded.")
+
 (make-directory user-cache-directory t)
 
 ;; Custom libs

@@ -446,24 +446,26 @@ temporarily making the buffer local value global."
 (use-package unfill-paragraph
   :bind ("M-Q" . unfill-paragraph))
 
-;; Unfortunately we need hacks to fetch latest org package instead of using org builtin.
-;; Prune builtin [and usually obsolete] org-mode from lisp load-path and as builtin package.
-;; https://github.com/jwiegley/use-package/issues/319
-(eval-when-compile (require 'cl-seq))
-(setq load-path
-      (cl-remove-if
-       (lambda(path)(string-match "/.*share/emacs/.*/lisp/org$" path)) load-path))
-(assq-delete-all 'org package--builtins)
-(assq-delete-all 'org package--builtin-versions)
-(use-package org
+;; Note: to get latest version from GNU ELPA, install it manually with package.el after first init.
+;; use-package will not automatically download a newer version than the builtin variant.
+(use-package org :pin "gnu"
   :ensure t
   :ensure htmlize
   :init
   (defvar org-directory-local-override nil
     "Override default `org-directory' by local configuration.")
-  (setq org-directory "~/org/"
-              org-default-notes-file (concat org-directory "index.org")
-              org-modules '(ol-info ol-man ox-md ox-publish ox-icalendar ox-html))
+  (defvar org-switchb-extra-org-paths nil
+    "List of extra org paths (files or directories) that shall be
+searched for org files to auto-visit before `org-switchb'.")
+  (defvar org-switchb-autoload-exclude-patterns nil
+    "List of regular expressions matched against file paths which
+shall not be autoloaded before org-switchb is invoked.")
+  (defvar org-switchb-only-include-agenda-files nil
+    "Whether to only include angenda files when initially calling org-switchb")
+  (add-hook 'local-init-file-after-hook
+            (lambda()
+              (setq org-directory (or org-directory-local-override "~/org/")
+                    org-default-notes-file (concat org-directory "index.org"))))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
@@ -479,10 +481,9 @@ temporarily making the buffer local value global."
                           (kill-buffer buf)))))
   :hook (org-mode . visual-line-mode)
   :config
+  (setq org-modules '(ol-info ol-man ox-md ox-publish ox-icalendar ox-html))
   (org-load-modules-maybe t)
   (setq
-   org-directory (or org-directory-local-override org-directory)
-   org-default-notes-file (concat org-directory "index.org")
    org-src-fontify-natively t
    org-agenda-files (list org-default-notes-file
                           (concat org-directory "calendar.org")
@@ -525,16 +526,6 @@ temporarily making the buffer local value global."
    org-html-doctype "html5"
    org-html-html5-fancy t
    org-html-head-include-default-style nil)
-  (defvar org-switchb-extra-org-paths nil
-    "List of extra org paths (files or directories) that shall be
-searched for org files to auto-visit before `org-switchb'.")
-
-  (defvar org-switchb-autoload-exclude-patterns nil
-    "List of regular expressions matched against file paths
-which shall not be autoloaded before org-switchb is invoked.")
-
-  (defvar org-switchb-only-include-agenda-files nil
-    "Whether to only include angenda files when initially calling org-switchb")
 
   (setq org-switchb-autoload-exclude-patterns '("gcal/[^/]*\\.org" ".*[mM]al[^/]*.org" "sitemap.org")
         org-switchb-only-include-agenda-files t)
@@ -598,4 +589,6 @@ which shall not be autoloaded before org-switchb is invoked.")
 (when (file-readable-p custom-file) (load custom-file))
 
 ;; local.el
-(when (file-readable-p local-init-file) (load local-init-file))
+(when (file-readable-p local-init-file)
+  (load local-init-file)
+  (run-hooks 'local-init-file-after-hook))
