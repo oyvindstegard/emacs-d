@@ -152,7 +152,7 @@
    ("C-x 4 k" . kill-buffer-other-window)
    ("C-c C-<return>" . window-dedicated-toggle))
   :commands (unfill-region
-	     extract-regexp-occurences
+	         extract-regexp-occurences
              insert-date-string
              xml-pretty-print-region
              uniquify-region
@@ -160,7 +160,8 @@
              tail-view-mode))
 
 (use-package winner
-  :init (winner-mode 1))
+  :defer 2
+  :init (winner-mode))
 
 (use-package ace-window
   :ensure t
