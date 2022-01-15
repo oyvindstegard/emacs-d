@@ -24,6 +24,12 @@
 ;; Custom libs
 (push (concat user-emacs-directory "el") load-path)
 
+;; Prune builtin org-mode from load-path because it creates issues when
+;; newer org-mode is fetched and compiled from remote archive by package.el.
+(eval-when-compile (require 'cl-seq))
+(setq load-path (cl-remove-if
+                 (lambda(path) (string-match "/.*share/emacs/.*/lisp/org$" path)) load-path))
+
 ;; Basic UI customizations
 (setq font-use-system-font t
       initial-frame-alist

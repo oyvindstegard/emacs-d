@@ -446,8 +446,9 @@ temporarily making the buffer local value global."
 (use-package unfill-paragraph
   :bind ("M-Q" . unfill-paragraph))
 
-;; Note: to get latest version from GNU ELPA, install it manually with package.el after first init.
-;; use-package will not automatically download a newer version than the builtin variant.
+;; NB ! Org-mode must be installed manunally using package.el on first time init !
+;; use-package will not automatically download org-mode from package archive due to
+;; issues with builtin vs external.
 (use-package org :pin "gnu"
   :ensure t
   :ensure htmlize
@@ -462,9 +463,11 @@ searched for org files to auto-visit before `org-switchb'.")
 shall not be autoloaded before org-switchb is invoked.")
   (defvar org-switchb-only-include-agenda-files nil
     "Whether to only include angenda files when initially calling org-switchb")
+  (setq org-directory "~/org/"
+        org-default-notes-file (concat org-directory "index.org"))
   (add-hook 'local-init-file-after-hook
             (lambda()
-              (setq org-directory (or org-directory-local-override "~/org/")
+              (setq org-directory (or org-directory-local-override org-directory)
                     org-default-notes-file (concat org-directory "index.org"))))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
