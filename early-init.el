@@ -23,6 +23,7 @@
 
 ;; Custom libs
 (push (concat user-emacs-directory "el") load-path)
+(byte-recompile-directory (concat user-emacs-directory "el") 0)
 
 ;; Prune builtin org-mode from load-path because it creates issues when
 ;; newer org-mode is fetched and compiled from remote archive by package.el.
