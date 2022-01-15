@@ -13,10 +13,8 @@
    ((and
      (eq system-type 'gnu/linux)
      (equal "ubuntu" (linux-os-release-field "ID")))
-    ;; Set using theme or customize instead:
-    ;; (setq initial-frame-alist (cons '(font . "Ubuntu Mono 11") initial-frame-alist)
-    ;;       default-frame-alist initial-frame-alist))
-    )
+    (set-face-font 'fixed-pitch "Ubuntu Mono"))
+
    ((eq system-type 'windows-nt)
     (setq initial-frame-alist (cons '(font . "Consolas 10") initial-frame-alist)
 	  default-frame-alist initial-frame-alist))))
