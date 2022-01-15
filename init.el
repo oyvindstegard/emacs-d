@@ -388,7 +388,7 @@ temporarily making the buffer local value global."
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch-popup))
+         ("C-x M-g" . magit-dispatch))
   :hook ((git-commit-mode . turn-on-auto-fill)
 	 (git-commit-mode . flyspell-mode)
 	 (git-commit-mode . (lambda() (setq ispell-local-dictionary "en"))))
