@@ -29,6 +29,7 @@
 
 ;; Apply visual theme, copied from https://github.com/susam/emfy with slight
 ;; modifications.
+(setq custom-theme-directory (concat user-emacs-directory "themes"))
 (load-theme 'wombat)
 (set-face-background 'default "#111")
 (set-face-background 'cursor "#c96")
@@ -37,11 +38,6 @@
 (set-face-background 'lazy-highlight "#960")
 (set-face-foreground 'lazy-highlight "#ccc")
 (set-face-foreground 'font-lock-comment-face "#cdad00")
-
-;; (setq custom-theme-directory (concat user-emacs-directory "themes"))
-;; (use-package gruvbox-theme
-;;   :ensure t
-;;   :config (load-theme 'gruvbox-dark-hard t))
 
 ;; Preferences
 (fset 'yes-or-no-p 'y-or-n-p)              ; Write "y" instead of "yes <RET>"
