@@ -503,7 +503,7 @@ shall not be autoloaded before org-switchb is invoked.")
    org-agenda-todo-ignore-scheduled 'future
    org-agenda-todo-ignore-deadlines 'far
    org-deadline-warning-days 4
-   org-email-link-description-format "Epost %c: %.60s"
+   org-email-link-description-format "E-post %c: %.60s"
    org-startup-align-all-tables t
    org-special-ctrl-a/e t
    org-publish-timestamp-directory (concat user-cache-directory "org-timestamps/")
