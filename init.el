@@ -529,9 +529,9 @@ shall not be autoloaded before org-switchb is invoked.")
   (setq org-switchb-autoload-exclude-patterns '("gcal/[^/]*\\.org" ".*[mM]al[^/]*.org" "sitemap.org")
         org-switchb-only-include-agenda-files t)
 
-  ;; Make sure desired org-files are automatically loaded when org-switchb is invoked
-  (require 'find-lisp)
-  (defadvice org-switchb (before org-switchb-DE-BEFORE activate)
+  (defun org-switchb--preload-some-org-buffers (&rest args)
+    "Preload some well known Org files into buffers."
+    (require 'find-lisp)
     (let ((org-paths
            (cl-delete-duplicates
             (append
@@ -539,31 +539,34 @@ shall not be autoloaded before org-switchb is invoked.")
              (when (not org-switchb-only-include-agenda-files) (list org-directory))
              (when (not org-switchb-only-include-agenda-files) org-switchb-extra-org-paths))
             :test 'equal))
-	  org-files)
+	      org-files)
       (while org-paths
-	(cond
-	 ((and (file-directory-p (car org-paths)) org-switchb-only-include-agenda-files)
-      (mapc (lambda(file) (push file org-files)) (directory-files (car org-paths) t "\\.org$")))
-     ((file-directory-p (car org-paths))
-	  (ignore-errors
-	    (mapc (lambda(file) (push file org-files)) (find-lisp-find-files (car org-paths) "\\.org$"))))
-	 ((file-regular-p (car org-paths)) (push (car org-paths) org-files)))
-	(setq org-paths (cdr org-paths)))
+	    (cond
+	     ((and (file-directory-p (car org-paths)) org-switchb-only-include-agenda-files)
+          (mapc (lambda(file) (push file org-files)) (directory-files (car org-paths) t "\\.org$")))
+         ((file-directory-p (car org-paths))
+	      (ignore-errors
+	        (mapc (lambda(file) (push file org-files)) (find-lisp-find-files (car org-paths) "\\.org$"))))
+	     ((file-regular-p (car org-paths)) (push (car org-paths) org-files)))
+	    (setq org-paths (cdr org-paths)))
       (while org-files
-	(unless (or (find-buffer-visiting (car org-files))
-		    (let ((regexps org-switchb-autoload-exclude-patterns)
-			  match)
-		      (while (and regexps (not (and (string-match (car regexps) (car org-files)) (setq match t))))
-			(setq regexps (cdr regexps)))
-		      match))
-	  (bury-buffer (find-file-noselect (car org-files) t)))
-	(setq org-files (cdr org-files)))))
+	    (unless (or (find-buffer-visiting (car org-files))
+		            (let ((regexps org-switchb-autoload-exclude-patterns)
+			              match)
+		              (while (and regexps (not (and (string-match (car regexps) (car org-files)) (setq match t))))
+			            (setq regexps (cdr regexps)))
+		              match))
+	      (bury-buffer (find-file-noselect (car org-files) t))
+          (message "Loading org file %s ..done" (car org-files)))
+	    (setq org-files (cdr org-files)))))
 
-  ;; Ignore case on buffer name completion for org-switchb
-  (defadvice org-switchb (around org-switchb-completion-ignore-case-DE activate)
-    (let ((completion-ignore-case t))
-      ad-do-it))
-  
+  (advice-add 'org-switchb :before #'org-switchb--preload-some-org-buffers)
+
+  (advice-add 'org-switchb :around (lambda(orig-fun &rest args)
+                                     "Ignore case for Org buffer completion with org-switchb"
+                                      (let ((completion-ignore-case t))
+                                        (apply orig-fun args))))
+
   (eval-after-load 'parse-time
     '(setq parse-time-weekdays (append parse-time-weekdays
 				       '(("søn" . 0)("man" . 1)("tir" . 2)("ons" . 3)
