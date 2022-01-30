@@ -459,12 +459,12 @@ shall not be autoloaded before org-switchb is invoked.")
   (defvar org-switchb-only-include-agenda-files nil
     "Whether to only include angenda files when initially calling org-switchb")
   (setq org-directory "~/org/"
-        org-default-notes-file (concat org-directory "index.org"))
+        org-default-notes-file (concat org-directory "index.org")
+        org-export-backends '(ascii html icalendar md))
   (add-hook 'local-init-file-after-hook
             (lambda()
               (setq org-directory (or org-directory-local-override org-directory)
                     org-default-notes-file (concat org-directory "index.org"))))
-  (setq org-export-backends '(ascii html icalendar md))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
