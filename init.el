@@ -464,6 +464,7 @@ shall not be autoloaded before org-switchb is invoked.")
             (lambda()
               (setq org-directory (or org-directory-local-override org-directory)
                     org-default-notes-file (concat org-directory "index.org"))))
+  (setq org-export-backends '(ascii html icalendar md))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
@@ -480,8 +481,6 @@ shall not be autoloaded before org-switchb is invoked.")
                           (kill-buffer buf)))))
   :hook (org-mode . visual-line-mode)
   :config
-  (setq org-modules '(ol-info ol-man ox-md ox-publish ox-icalendar ox-html))
-  (org-load-modules-maybe t)
   (setq
    org-src-fontify-natively t
    org-agenda-files (list org-default-notes-file
@@ -580,10 +579,8 @@ shall not be autoloaded before org-switchb is invoked.")
 				       ("november" . 11)("desember" . 12)
 				       ("mai" . 5)("okt" . 10)("des" . 12))))))
 
-(use-package org-superstar
-  :ensure t
-  :after org
-  :disabled)
+(use-package ol-man
+  :after org)
 
 ;; custom.el
 (when (file-readable-p custom-file) (load custom-file))
