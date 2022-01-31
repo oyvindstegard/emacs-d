@@ -468,7 +468,6 @@ shall not be autoloaded before org-switchb is invoked.")
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
-         ("C-c o i" . org-get-id-create)
 	     ("C-c o b" . org-switchb)
 	     ("C-c o r" . org-capture)
          ("C-c o o" . (lambda ()
@@ -506,7 +505,6 @@ shall not be autoloaded before org-switchb is invoked.")
    org-startup-align-all-tables t
    org-special-ctrl-a/e t
    org-publish-timestamp-directory (concat user-cache-directory "org-timestamps/")
-   org-id-locations-file (concat user-cache-directory "org-id-locations")
    org-footnote-fill-after-inline-note-extraction nil
    org-goto-auto-isearch t
    org-enforce-todo-dependencies t
@@ -584,6 +582,11 @@ shall not be autoloaded before org-switchb is invoked.")
 
 (use-package ol-man
   :after org)
+
+(use-package org-id
+  :after org
+  :init (setq org-id-locations-file (concat user-cache-directory "org-id-locations"))
+  :bind ("C-c o i" . org-id-get-create))
 
 ;; custom.el
 (when (file-readable-p custom-file) (load custom-file))
