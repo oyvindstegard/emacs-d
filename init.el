@@ -139,7 +139,16 @@
 
 (use-package man
   :defer t
-  :config (setq Man-notify-method 'aggressive))
+  :config
+  (setq Man-notify-method 'aggressive)
+  ;; Ensure man page display always reuses an existing Man-mode window if one exists:
+  (add-to-list 'display-buffer-alist
+               '("^\\*Man .*"
+                 (display-buffer-reuse-mode-window)
+                 (inhibit-same-window . nil)
+                 (mode . Man-mode)
+                 (reusable-frames . visible)
+                 (inhibit-switch-frame . nil))))
 
 (use-package nsm
   :defer t
