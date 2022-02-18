@@ -579,12 +579,13 @@ shall not be autoloaded before org-switchb is invoked.")
   (eval-after-load 'parse-time
     '(setq parse-time-weekdays (append parse-time-weekdays
 				       '(("søn" . 0)("man" . 1)("tir" . 2)("ons" . 3)
-					 ("tor" . 4)("fre" . 5)("lør" . 6)
-					 ("søndag" . 0)("mandag" . 1)("tirsdag" . 2)("onsdag" . 3)
-					 ("torsdag" . 4)("fredag" . 5)("lørdag" . 6)
-					 ))
+					     ("tor" . 4)("fre" . 5)("lør" . 6)
+                         ("sø." . 0)("ma." . 1)("ti." . 2)("on." . 3)
+                         ("to." . 4)("fr." . 5)("lø." . 6)
+					     ("søndag" . 0)("mandag" . 1)("tirsdag" . 2)("onsdag" . 3)
+					     ("torsdag" . 4)("fredag" . 5)("lørdag" . 6)))
 	   
-	   parse-time-months (append parse-time-months
+           parse-time-months (append parse-time-months
 				     '(("januar" . 1)("februar" . 2)("mars" . 3)
 				       ("april" . 4)("juni" . 6)("juli" . 7)
 				       ("august" . 8)("september" . 9)("oktober" . 10)
