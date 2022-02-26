@@ -83,11 +83,16 @@
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'list-timers 'disabled nil)
+(blink-cursor-mode 0)
+(menu-bar-mode 0)
+(xterm-mouse-mode 1)
 (setq default-input-method "rfc1345"
       kill-buffer-query-functions (delete 'process-kill-buffer-query-function
                                           kill-buffer-query-functions)
       confirm-kill-processes nil
-      blink-cursor-mode nil
+      visible-cursor nil
+      ring-bell-function 'ignore
+      tty-menu-open-use-tmm t
       window-min-height 10
       column-number-mode t
       display-time-24hr-format t
