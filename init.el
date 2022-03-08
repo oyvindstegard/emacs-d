@@ -86,6 +86,8 @@
 (blink-cursor-mode 0)
 (menu-bar-mode 0)
 (xterm-mouse-mode 1)
+(global-set-key (kbd "<mouse-4>") (lambda()(interactive) (scroll-down-line 5)))
+(global-set-key (kbd "<mouse-5>") (lambda()(interactive) (scroll-up-line 5)))
 (setq default-input-method "rfc1345"
       kill-buffer-query-functions (delete 'process-kill-buffer-query-function
                                           kill-buffer-query-functions)
@@ -543,6 +545,8 @@ shall not be autoloaded before org-switchb is invoked.")
 
   (setq org-switchb-autoload-exclude-patterns '("gcal/[^/]*\\.org" ".*[mM]al[^/]*.org" "sitemap.org")
         org-switchb-only-include-agenda-files t)
+
+  (bind-key "C-<delete>" 'org-table-blank-field org-mode-map)
 
   (defun org-switchb--preload-some-org-buffers (&rest args)
     "Preload some well known Org files into buffers."
