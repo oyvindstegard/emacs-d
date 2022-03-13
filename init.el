@@ -337,7 +337,7 @@ temporarily making the buffer local value global."
   :ensure t
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :config (python-shell-interpreter "python3"))
+  :config (setq python-shell-interpreter "python3"))
 
 (use-package log-edit
   :defer t
