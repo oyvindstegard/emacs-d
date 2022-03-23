@@ -543,6 +543,8 @@ shall not be autoloaded before org-switchb is invoked.")
    org-html-html5-fancy t
    org-html-head-include-default-style nil)
 
+  (setcdr (assq 'file org-link-frame-setup) 'find-file) ; org file links open in current window
+
   (setq org-switchb-autoload-exclude-patterns '("gcal/[^/]*\\.org" ".*[mM]al[^/]*.org" "sitemap.org")
         org-switchb-only-include-agenda-files t)
 
