@@ -478,12 +478,12 @@ shall not be autoloaded before org-switchb is invoked.")
   (defvar org-switchb-only-include-agenda-files nil
     "Whether to only include angenda files when initially calling org-switchb")
   (setq org-directory "~/org/"
-        org-default-notes-file (concat org-directory "index.org")
+        org-default-notes-file (concat org-directory "journal.org")
         org-export-backends '(ascii html icalendar md))
   (add-hook 'local-init-file-after-hook
             (lambda()
               (setq org-directory (or org-directory-local-override org-directory)
-                    org-default-notes-file (concat org-directory "index.org"))))
+                    org-default-notes-file (concat org-directory "journal.org"))))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
@@ -502,9 +502,8 @@ shall not be autoloaded before org-switchb is invoked.")
   (setq
    org-src-fontify-natively t
    org-agenda-files (list org-default-notes-file
-                          (concat org-directory "calendar.org")
-                          (concat org-directory "work.org")
-                          (concat org-directory "notes.org"))
+                          (concat org-directory "index.org")
+                          (concat org-directory "work.org"))
    org-agenda-skip-unavailable-files t
    org-hide-leading-stars nil
    org-indent-mode-turns-on-hiding-stars nil
@@ -534,6 +533,16 @@ shall not be autoloaded before org-switchb is invoked.")
    org-refile-target-verify-function (lambda()
 					                   "Exclude todo keywords with a done state from refile targets"
 					                   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+   ;; Capture
+   org-capture-templates '(("o" "Oppgave"
+                            entry (file+olp "index.org" "Oppgaver")
+                            "* TODO %?
+%u" :jump-to-captured t)
+                           ("n" "Notat i journal"
+                           entry (file+olp+datetree "journal.org")
+                           "* %?" :jump-to-captured t))
+   
    ;; Global export settings
    org-export-default-language "no"
    org-export-use-babel nil
