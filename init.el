@@ -534,11 +534,19 @@ shall not be autoloaded before org-switchb is invoked.")
 					                   "Exclude todo keywords with a done state from refile targets"
 					                   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
-   ;; Capture
    org-capture-templates '(("o" "Oppgave"
                             entry (file+olp "index.org" "Oppgaver")
                             "* TODO %?
 %u" :jump-to-captured t)
+                           ("k" "Nytt innslag i privat kalender" entry
+                            (file+headline (lambda() (concat org-directory "index.org")) "Kalender")
+                            "* %^{Tittel}
+:PROPERTIES:
+:ID: %(org-id-new)
+:END:
+%?%^T
+" :prepend t :jump-to-captured t)
+
                            ("n" "Notat i journal"
                            entry (file+olp+datetree "journal.org")
                            "* %?" :jump-to-captured t))
