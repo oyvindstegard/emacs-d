@@ -500,7 +500,6 @@ shall not be autoloaded before org-switchb is invoked.")
   :hook (org-mode . visual-line-mode)
   :config
   (setq
-   org-src-fontify-natively t
    org-agenda-files (list org-default-notes-file
                           (concat org-directory "index.org")
                           (concat org-directory "work.org"))
@@ -551,6 +550,8 @@ shall not be autoloaded before org-switchb is invoked.")
                            entry (file+olp+datetree "journal.org")
                            "* %?" :jump-to-captured t))
    
+   org-src-fontify-natively t
+   org-edit-src-content-indentation 0
    ;; Global export settings
    org-export-default-language "no"
    org-export-use-babel nil
@@ -559,6 +560,9 @@ shall not be autoloaded before org-switchb is invoked.")
    org-html-doctype "html5"
    org-html-html5-fancy t
    org-html-head-include-default-style nil)
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((emacs-lisp . t)(java . t)(shell . t)))
 
   (setcdr (assq 'file org-link-frame-setup) 'find-file) ; org file links open in current window
 
