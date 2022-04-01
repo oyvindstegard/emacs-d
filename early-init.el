@@ -10,14 +10,19 @@
       inhibit-startup-screen t
       initial-scratch-message ";; Ready\n\n"
       custom-file (concat user-emacs-directory "custom.el")
-      local-init-file (concat user-emacs-directory "local.el")
-      user-cache-directory (concat user-emacs-directory "cache/")
       package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/"))
       package-enable-at-startup nil)
 
+(defvar user-cache-directory (concat user-emacs-directory "cache/")
+  "Directory for all Emacs caching needs. Avoid cluttering
+`user-emacs-directory'.")
+(defvar local-init-file (concat user-emacs-directory "local.el")
+  "Optional local Emacs configuration that varies per
+host/installation. Loaded as last step after all other
+intialization.")
 (defvar local-init-file-after-hook nil
-  "Hooks run after `local-init-file' has been loaded.")
+  "Hooks run after any `local-init-file' has been loaded.")
 
 (make-directory user-cache-directory t)
 
