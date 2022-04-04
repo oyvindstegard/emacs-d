@@ -363,6 +363,29 @@ temporarily making the buffer local value global."
   :ensure t
   :defer t)
 
+(use-package nxml-mode
+  :defer t
+  :config
+  ;; From: https://www.emacswiki.org/emacs/NxmlMode
+  (defun nxml-where ()
+    "Display the hierarchy of XML elements the point is on as a path."
+    (interactive)
+    (let ((path nil))
+      (save-excursion
+        (save-restriction
+          (widen)
+          (while (and (< (point-min) (point)) ;; Doesn't error if point is at beginning of buffer
+                      (condition-case nil
+                          (progn
+                            (nxml-backward-up-element) ; always returns nil
+                            t)
+                        (error nil)))
+            (setq path (cons (xmltok-start-tag-local-name) path)))
+          (if (called-interactively-p t)
+              (message "/%s" (mapconcat 'identity path "/"))
+            (format "/%s" (mapconcat 'identity path "/")))))))
+  (define-key nxml-mode-map (kbd "C-c w") 'nxml-where))
+
 (use-package restclient
   :ensure t
   :commands (restclient-mode)
@@ -384,7 +407,8 @@ temporarily making the buffer local value global."
      (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
   (push "rcirc" projectile-globally-ignored-modes)
-  (setq projectile-switch-project-action 'neotree-projectile-action))
+  (setq projectile-switch-project-action 'neotree-projectile-action
+        projectile-mode-line-prefix " Proj"))
 
 (use-package apache-mode
   :ensure t
