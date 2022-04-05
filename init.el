@@ -408,7 +408,7 @@ temporarily making the buffer local value global."
   (push "jabber-.*" projectile-globally-ignored-modes)
   (push "rcirc" projectile-globally-ignored-modes)
   (setq projectile-switch-project-action 'neotree-projectile-action
-        projectile-mode-line-prefix " Proj"))
+        projectile-mode-line-prefix " Pro"))
 
 (use-package apache-mode
   :ensure t
