@@ -26,7 +26,7 @@ intialization.")
 
 (make-directory user-cache-directory t)
 
-;; Custom libs
+;; Custom public libs
 (push (concat user-emacs-directory "el") load-path)
 (byte-recompile-directory (concat user-emacs-directory "el") 0)
 
