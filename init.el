@@ -302,6 +302,25 @@ temporarily making the buffer local value global."
   :hook ((shell-mode . dirtrack-mode)
          (shell-mode . (lambda()(shell-dirtrack-mode -1)))))
 
+(use-package term
+  :defer t
+  :config
+  ;; Set default term.el ANSI color mappings to something nicer:
+  (set-face-background 'term-color-magenta "#9400d3")
+  (set-face-foreground 'term-color-magenta "#9400d3")
+  (set-face-foreground 'term-color-cyan "#00bfff")
+  (set-face-background 'term-color-cyan "#00bfff")
+  (set-face-foreground 'term-color-blue "#4169e1")
+  (set-face-background 'term-color-blue "#4169e1")
+  (set-face-foreground 'term-color-green "#3cb371")
+  (set-face-background 'term-color-green "#3cb371")
+  (set-face-foreground 'term-color-black "#4b4b4b")
+  (set-face-background 'term-color-black "#4b4b4b")
+  (set-face-foreground 'term-color-yellow "#eead0e")
+  (set-face-background 'term-color-yellow "#eead0e")
+  (set-face-foreground 'term-color-red "#cd3700")
+  (set-face-background 'term-color-red "#cd3700"))
+
 (use-package tramp
   :defer t
   :config (setq tramp-persistency-file-name (concat user-cache-directory "tramp")
