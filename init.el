@@ -119,23 +119,22 @@
 
 (use-package saveplace
   :config
-  (setq save-place-file (concat user-cache-directory "places"))
+  (setq save-place-file (concat user-cache-directory "places")
+        save-place-limit 1000)
   (save-place-mode 1))
 
 (use-package savehist
-  :defer 4
   :config
   (setq savehist-file (concat user-cache-directory "minibuffer-history"))
   (savehist-mode))
 
 (use-package recentf
-  :defer nil
   :bind ("C-x C-r" . recentf-open-files)
   :config
-  (setq recentf-max-saved-items 50
-        recentf-max-menu-items 20
+  (setq recentf-max-saved-items 1000
+        recentf-max-menu-items 50
 	    recentf-save-file (concat user-cache-directory "recentf")
-        recentf-exclude '("Privat"))
+        recentf-exclude '("Privat", "\\.emacs\\.d/elpa/"))
   (recentf-mode 1))
 
 (use-package bookmark
