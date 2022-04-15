@@ -330,10 +330,25 @@ temporarily making the buffer local value global."
   :ensure t
   :mode ("\\.webmanifest\\'" . json-mode))
 
+(use-package js2-refactor
+  :ensure t
+  :after js2-mode
+  :config
+  (add-hook 'js2-mode-hook #'js2-refactor-mode)
+  (js2r-add-keybindings-with-prefix "C-c r"))
+
+(use-package expand-region
+  :ensure t
+  :after js2-mode
+  :config
+  (define-key js2-mode-map (kbd "C-c e") 'er/expand-region))
+
 (use-package js2-mode
   :ensure t
   :commands (js2-mode)
-  :mode ("\\.js\\'" . js2-mode))
+  :mode ("\\.js\\'" . js2-mode)
+  :config
+  (set-face-foreground 'js2-function-param "#3cb371"))
 
 (use-package markdown-mode
   :ensure t
