@@ -6,18 +6,43 @@
 (when (eval-when-compile (version< emacs-version "27"))
   (load (concat user-emacs-directory "early-init.el")))
 
+;; Configure visuals early.
+(setq custom-theme-directory (concat user-emacs-directory "themes"))
 (require 'myfuncs)
+(defun oyvind/setup-visuals ()
+  "Configure theme/faces."
+  (menu-bar-mode 0)
+  (setq font-use-system-font t
+        initial-frame-alist
+        '((tool-bar-lines . 0)
+          (vertical-scroll-bars . nil)
+          (horizontal-scroll-bars . nil)
+          (menu-bar-lines . 0))
+        default-frame-alist initial-frame-alist)
+  
+  (load-theme 'wombat)
+  (set-face-background 'default "#111")
+  (set-face-background 'cursor "#c96")
+  (set-face-background 'isearch "#c60")
+  (set-face-foreground 'isearch "#eee")
+  (set-face-background 'lazy-highlight "#960")
+  (set-face-foreground 'lazy-highlight "#ccc")
+  (set-face-foreground 'font-lock-comment-face "#cdad00")
 
-(when (display-graphic-p)
-  (cond
-   ((and
-     (eq system-type 'gnu/linux)
-     (equal "ubuntu" (linux-os-release-field "ID")))
-    (set-face-font 'fixed-pitch "Ubuntu Mono"))
-
-   ((eq system-type 'windows-nt)
-    (setq initial-frame-alist (cons '(font . "Consolas 10") initial-frame-alist)
-	  default-frame-alist initial-frame-alist))))
+  (let ((x-fontname (if (and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID")))
+                        "Ubuntu Mono" "Monospace"))
+        (w32-fontname "Consolas 10"))
+    (setq window-system-default-frame-alist
+          (list `(x . ,(cons (cons 'font x-fontname) initial-frame-alist))
+                `(w32 . ,(cons (cons 'font w32-fontname) initial-frame-alist))))
+    ;; Reset fixed pitch font, which is sometimes wrong if Emacs has been
+    ;; started as daemon initially
+    (when (display-graphic-p)
+      (cond
+       ((eq system-type 'windows-nt) (set-face-font 'fixed-pitch w32-fontname))
+       ((eq system-type 'gnu/linux) (set-face-font 'fixed-pitch x-fontname))))))
+(oyvind/setup-visuals)
+(add-hook 'server-after-make-frame-hook 'oyvind/setup-visuals)
 
 ;; Boot strap package and use-package
 (package-initialize)                    ; early-init.el sets package-enable-at-startup to nil
@@ -27,17 +52,6 @@
 (eval-when-compile (require 'use-package))
 (setq use-package-verbose t)
 
-;; Apply visual theme, copied from https://github.com/susam/emfy with slight
-;; modifications.
-(setq custom-theme-directory (concat user-emacs-directory "themes"))
-(load-theme 'wombat)
-(set-face-background 'default "#111")
-(set-face-background 'cursor "#c96")
-(set-face-background 'isearch "#c60")
-(set-face-foreground 'isearch "#eee")
-(set-face-background 'lazy-highlight "#960")
-(set-face-foreground 'lazy-highlight "#ccc")
-(set-face-foreground 'font-lock-comment-face "#cdad00")
 
 ;; Preferences
 (fset 'yes-or-no-p 'y-or-n-p)              ; Write "y" instead of "yes <RET>"
@@ -84,7 +98,6 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'list-timers 'disabled nil)
 (blink-cursor-mode 0)
-(menu-bar-mode 0)
 (xterm-mouse-mode 1)
 (global-set-key (kbd "<mouse-4>") (lambda()(interactive) (scroll-down-line 5)))
 (global-set-key (kbd "<mouse-5>") (lambda()(interactive) (scroll-up-line 5)))

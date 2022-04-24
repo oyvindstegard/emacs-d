@@ -35,14 +35,3 @@ intialization.")
 (eval-when-compile (require 'cl-seq))
 (setq load-path (cl-remove-if
                  (lambda(path) (string-match "/.*share/emacs/.*/lisp/org$" path)) load-path))
-
-;; Basic UI customizations
-(setq font-use-system-font t
-      initial-frame-alist
-      '((tool-bar-lines . 0)
-        (vertical-scroll-bars . nil)
-        (horizontal-scroll-bars . nil)
-        (menu-bar-lines . 0)
-        (height . 62)
-        (width . 114))
-      default-frame-alist initial-frame-alist)
