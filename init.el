@@ -101,7 +101,7 @@
 (xterm-mouse-mode 1)
 (global-set-key (kbd "<mouse-4>") (lambda()(interactive) (scroll-down-line 5)))
 (global-set-key (kbd "<mouse-5>") (lambda()(interactive) (scroll-up-line 5)))
-(setq default-input-method "rfc1345"
+(setq default-input-method "rfc1345"    ; active this input method with C-\
       kill-buffer-query-functions (delete 'process-kill-buffer-query-function
                                           kill-buffer-query-functions)
       confirm-kill-processes nil
