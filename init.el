@@ -43,6 +43,7 @@
        ((eq system-type 'gnu/linux) (set-face-font 'fixed-pitch x-fontname))))))
 (oyvind/setup-visuals)
 (add-hook 'server-after-make-frame-hook 'oyvind/setup-visuals)
+(add-hook 'server-after-make-frame-hook (lambda() (select-frame-set-input-focus (selected-frame))))
 
 ;; Boot strap package and use-package
 (package-initialize)                    ; early-init.el sets package-enable-at-startup to nil
@@ -51,7 +52,6 @@
   (package-install 'use-package))
 (eval-when-compile (require 'use-package))
 (setq use-package-verbose t)
-
 
 ;; Preferences
 (fset 'yes-or-no-p 'y-or-n-p)              ; Write "y" instead of "yes <RET>"
