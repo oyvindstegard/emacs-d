@@ -33,8 +33,9 @@
                         "Ubuntu Mono" "Monospace"))
         (w32-fontname "Consolas 10"))
     (setq window-system-default-frame-alist
-          (list `(x . ,(cons (cons 'font x-fontname) initial-frame-alist))
-                `(w32 . ,(cons (cons 'font w32-fontname) initial-frame-alist))))
+          (list
+           (cons 'x (list (cons 'font x-fontname)))
+           (cons 'w32 (list (cons 'font w32-fontname)))))
     ;; Reset fixed pitch font, which is sometimes wrong if Emacs has been
     ;; started as daemon initially
     (when (display-graphic-p)
