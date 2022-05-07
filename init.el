@@ -513,6 +513,10 @@ temporarily making the buffer local value global."
   (which-function-mode 1)
   (set-face-foreground 'which-func "LightSkyBlue"))
 
+(use-package ielm
+  :defer t
+  :init (setq ielm-prompt "EL> "))
+
 (use-package paren
   :defer 5
   :config (show-paren-mode 1))
