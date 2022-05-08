@@ -115,7 +115,7 @@
       display-time-day-and-date t
       ps-paper-type 'a4
       undo-outer-limit 30000000
-      large-file-warning-threshold 67108864
+      large-file-warning-threshold 104857600
       message-log-max 10000
       make-backup-files nil
       uniquify-buffer-name-style 'forward
@@ -155,7 +155,7 @@
   :defer t
   :config
   (setq bookmark-bmenu-file-column 60
-	bookmark-default-file (concat user-cache-directory "bookmarks.bmk")))
+	    bookmark-default-file (concat user-cache-directory "bookmarks.bmk")))
 
 (use-package man
   :defer t
@@ -496,7 +496,7 @@ temporarily making the buffer local value global."
 (use-package sql
   :defer t
   :config (setq sql-input-ring-file-name (concat user-cache-directory "sql-history")
-		sql-mysql-options '("--silent")))
+		        sql-mysql-options '("--silent")))
 
 (use-package cc-mode
   :defer t
