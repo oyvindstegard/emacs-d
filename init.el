@@ -309,9 +309,10 @@ temporarily making the buffer local value global."
 (use-package shell
   :commands (shell)
   :config
-  (setq shell-completion-fignore '(".svn" ".git" ".bzr" "#" "~" "%"))
-  ; NB Expects prompt free of ANSI codes:
-  (setq-default dirtrack-list '("^\\(([a-z0-9-]+) \\)?[a-z]*@[a-z]+[[:space:]:]?\\([^$[]+\\)" 2))
+  (setq shell-completion-fignore '(".git" "#" "~" "%")
+        explicit-shell-file-name "/bin/bash")
+  ;; NB Expects prompt (mostly) free of ANSI escape sequences:
+  (setq-default dirtrack-list '("^\\(([a-z0-9-]+) \\)?[a-z]*@[a-z0-9]+[[:space:]:]?\\([^$[]+\\)" 2))
   :hook ((shell-mode . dirtrack-mode)
          (shell-mode . (lambda()(shell-dirtrack-mode -1)))))
 
