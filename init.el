@@ -337,7 +337,8 @@ temporarily making the buffer local value global."
 
 (use-package tramp
   :defer t
-  :config (setq tramp-persistency-file-name (concat user-cache-directory "tramp")
+  :config (setq auto-save-file-name-transforms nil ; Never autosave remote files in /tmp on local host
+                tramp-persistency-file-name (concat user-cache-directory "tramp")
                 tramp-verbose 2))
 
 (use-package json-mode
