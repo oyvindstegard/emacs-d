@@ -54,7 +54,7 @@
 (eval-when-compile (require 'use-package))
 (setq use-package-verbose t)
 
-;; Preferences
+;; General Emacs Preferences
 (fset 'yes-or-no-p 'y-or-n-p)              ; Write "y" instead of "yes <RET>"
 (global-set-key (kbd "s-E") 'delete-frame) ; Make Win+Shift+e kill frame
 (global-set-key (kbd "C-c f") 'auto-fill-mode)
@@ -124,7 +124,8 @@
       mouse-yank-at-point t
       set-mark-command-repeat-pop t
       read-buffer-completion-ignore-case t
-      read-file-name-completion-ignore-case t)
+      read-file-name-completion-ignore-case t
+      auto-save-list-file-prefix (concat user-cache-directory "auto-save-list/.saves-"))
 
 ;; Packages (both internal and external)
 
