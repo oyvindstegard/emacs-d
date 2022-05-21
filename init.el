@@ -6,6 +6,8 @@
 (when (eval-when-compile (version< emacs-version "27"))
   (load (concat user-emacs-directory "early-init.el")))
 
+(defun e28p () "Are we running Emacs 28 ?" (eval-when-compile (not (version< emacs-version "28"))))
+
 ;; Configure visuals early.
 (setq custom-theme-directory (concat user-emacs-directory "themes"))
 (require 'myfuncs)
@@ -14,7 +16,8 @@
   (menu-bar-mode 0)
   (setq font-use-system-font t
         initial-frame-alist
-        '((tool-bar-lines . 0)
+        '((tab-bar-lines . 0)
+          (tool-bar-lines . 0)
           (vertical-scroll-bars . nil)
           (horizontal-scroll-bars . nil)
           (menu-bar-lines . 0))
@@ -55,7 +58,8 @@
 (setq use-package-verbose t)
 
 ;; General Emacs Preferences
-(fset 'yes-or-no-p 'y-or-n-p)              ; Write "y" instead of "yes <RET>"
+(if (e28p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"
+
 (global-set-key (kbd "s-E") 'delete-frame) ; Make Win+Shift+e kill frame
 (global-set-key (kbd "C-c f") 'auto-fill-mode)
 (global-set-key (kbd "C-x v f") 'view-file)
@@ -443,7 +447,21 @@ temporarily making the buffer local value global."
   :hook (restclient-mode . (lambda() (set (make-local-variable 'js-indent-level) 2)))
   :bind (:map restclient-mode-map ("C-c C-f" . json-mode-beautify)))
 
+
+;; Prefer built-in project package for Emacs >= 28, projectile otherwise.
+(use-package project
+  :if (e28p)
+  :init
+  (setq project-list-file (concat user-cache-directory "projects"))
+  :bind (:map project-prefix-map
+              ("n" . neotree-show)
+              ("m" . magit-status))
+  :config
+  (add-to-list 'project-switch-commands (list 'magit-status "Magit status") t)
+  (add-to-list 'project-switch-commands (list 'neotree-show "Neotree") t))
+
 (use-package projectile
+  :unless (e28p)
   :ensure t
   :init (setq projectile-keymap-prefix (kbd "C-c p"))
   (when (file-directory-p "~/dev")
@@ -454,7 +472,7 @@ temporarily making the buffer local value global."
   :config
   (projectile-mode 1)
   (defadvice projectile-project-root (around ignore-remote first activate)
-     (unless (file-remote-p default-directory) ad-do-it))
+    (unless (file-remote-p default-directory) ad-do-it))
   (push "jabber-.*" projectile-globally-ignored-modes)
   (push "rcirc" projectile-globally-ignored-modes)
   (setq projectile-switch-project-action 'neotree-projectile-action
@@ -611,22 +629,24 @@ shall not be autoloaded before org-switchb is invoked.")
 					                   "Exclude todo keywords with a done state from refile targets"
 					                   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
-   org-capture-templates '(("o" "Oppgave"
-                            entry (file+olp "index.org" "Oppgaver")
-                            "* TODO %?
+   org-capture-templates
+   '(("o" "Oppgave"
+      entry (file+olp "index.org" "Oppgaver")
+      "* TODO %?
 %u" :jump-to-captured t)
-                           ("k" "Nytt innslag i privat kalender" entry
-                            (file+headline (lambda() (concat org-directory "index.org")) "Kalender")
-                            "* %^{Tittel}
+     
+     ("k" "Nytt innslag i privat kalender" entry
+      (file+headline (lambda() (concat org-directory "index.org")) "Kalender")
+      "* %^{Tittel}
 :PROPERTIES:
 :ID: %(org-id-new)
 :END:
 %?%^T
 " :prepend t :jump-to-captured t)
 
-                           ("n" "Notat i journal"
-                           entry (file+olp+datetree "journal.org")
-                           "* %?" :jump-to-captured t))
+     ("n" "Notat i journal"
+      entry (file+function "journal.org" org-reverse-datetree-goto-date-in-file)
+      "* %?" :jump-to-captured t))
    
    org-src-fontify-natively t
    org-edit-src-content-indentation 0
@@ -710,6 +730,10 @@ shall not be autoloaded before org-switchb is invoked.")
   :after org
   :init (setq org-id-locations-file (concat user-cache-directory "org-id-locations"))
   :bind ("C-c o i" . org-id-get-create))
+
+(use-package org-reverse-datetree
+  :ensure t
+  :after org)
 
 ;; custom.el
 (when (file-readable-p custom-file) (load custom-file))
