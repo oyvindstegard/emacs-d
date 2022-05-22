@@ -54,11 +54,17 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(eval-when-compile (require 'use-package))
-(setq use-package-verbose t)
+(require 'use-package)
 
 ;; General Emacs Preferences
 (if (e28p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"
+
+(defun oyvind/visit-or-kill-init-file ()
+  (interactive)
+  (if (equal (buffer-file-name) user-init-file)
+      (kill-buffer)
+    (find-file user-init-file)
+    (add-hook 'after-save-hook (lambda() (byte-compile-file user-init-file)) nil t)))
 
 (global-set-key (kbd "s-E") 'delete-frame) ; Make Win+Shift+e kill frame
 (global-set-key (kbd "C-c f") 'auto-fill-mode)
@@ -72,25 +78,8 @@
 (global-set-key (kbd "<f6>") 'next-error)
 (global-set-key (kbd "<S-f6>") 'previous-error)
 (global-set-key (kbd "<f12>") 'save-buffers-kill-emacs)
-(global-set-key (kbd "C-c i") (lambda() (interactive)
-                                (if (equal (buffer-file-name)
-                                           (file-truename (concat user-emacs-directory "init.el")))
-                                    (kill-buffer)
-                                  (find-file (concat user-emacs-directory "init.el")))))
-(global-set-key (kbd "C-M-\\") (lambda() (interactive) (message "Use M-i !")))
+(global-set-key (kbd "C-c i") 'oyvind/visit-or-kill-init-file)
 
-(with-eval-after-load "isearch"
-  (global-set-key (kbd "C-x 4 s")
-		  (lambda(&optional arg) "Isearch other window"
-		    (interactive "p") (other-window arg) (call-interactively 'isearch-forward)))
-  (define-key isearch-mode-map (kbd "M->")
-    (lambda() "Go to end of buffer and repeat search backwards."
-      (interactive)
-      (goto-char (point-max))(isearch-repeat-backward)))
-  (define-key isearch-mode-map (kbd "M-<")
-    (lambda() "Go to beginning of buffer and repeat search forwards."
-      (interactive)
-      (goto-char (point-min))(isearch-repeat-forward))))
 (setenv "EDITOR" "emacsclient")
 (setenv "PAGER" "cat")
 (set-language-environment "UTF-8")
@@ -127,11 +116,24 @@
       sentence-end-double-space nil
       mouse-yank-at-point t
       set-mark-command-repeat-pop t
+      completion-ignore-case t
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t
       auto-save-list-file-prefix (concat user-cache-directory "auto-save-list/.saves-"))
 
 ;; Packages (both internal and external)
+
+(use-package isearch
+  :defer t
+  :bind ("C-x 4 s" . (lambda(&optional arg) "Isearch other window"
+		               (interactive "p") (other-window arg) (call-interactively 'isearch-forward)))
+  :bind (:map isearch-mode-map
+              ("M->" . (lambda() "Go to end of buffer and repeat search backwards."
+                         (interactive)
+                         (goto-char (point-max))(isearch-repeat-backward)))
+              ("M-<" . (lambda() "Go to beginning of buffer and repeat search forwards."
+                         (interactive)
+                         (goto-char (point-min))(isearch-repeat-forward)))))
 
 (use-package show-point-mode
   :commands show-point-mode)
@@ -257,8 +259,7 @@
 
 (use-package pcomplete
   :defer t
-  :config (setq pcomplete-dir-ignore "\\.(git\\|svn)/\\'"
-		pcomplete-ignore-case t))
+  :config (setq pcomplete-dir-ignore "\\.(git\\|svn)/\\'"))
 
 (use-package ido
   :defer t
@@ -623,7 +624,6 @@ shall not be autoloaded before org-switchb is invoked.")
    org-agenda-todo-ignore-scheduled 'future
    org-agenda-todo-ignore-deadlines 'far
    org-deadline-warning-days 4
-   org-email-link-description-format "E-post %c: %.60s"
    org-startup-align-all-tables t
    org-special-ctrl-a/e t
    org-yank-adjusted-subtrees t
