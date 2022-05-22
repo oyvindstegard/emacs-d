@@ -319,6 +319,7 @@ temporarily making the buffer local value global."
         explicit-shell-file-name "/bin/bash")
   ;; NB Expects prompt (mostly) free of ANSI escape sequences:
   (setq-default dirtrack-list '("^\\(([a-z0-9-]+) \\)?[a-z]*@[a-z0-9]+[[:space:]:]?\\([^$[]+\\)" 2))
+  ;; TODO: use OSC escapes to inform Emacs about shell working dir
   :hook ((shell-mode . dirtrack-mode)
          (shell-mode . (lambda()(shell-dirtrack-mode -1)))))
 
