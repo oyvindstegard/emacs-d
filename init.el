@@ -634,12 +634,12 @@ shall not be autoloaded before org-switchb is invoked.")
 
    org-capture-templates
    '(("o" "Oppgave"
-      entry (file+olp "index.org" "Oppgaver")
+      entry (id "ef1e5253-3681-4189-857f-814ca5e97b95")
       "* TODO %?
-%u" :jump-to-captured t)
+%u" :prepend t :jump-to-captured t)
      
-     ("k" "Nytt innslag i privat kalender" entry
-      (file+headline (lambda() (concat org-directory "index.org")) "Kalender")
+     ("k" "Nytt innslag i privat kalender"
+      entry (id "d5b3a45b-65c6-4fc4-9d99-edd60a4fe5c9")
       "* %^{Tittel}
 :PROPERTIES:
 :ID: %(org-id-new)
