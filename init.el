@@ -617,6 +617,7 @@ shall not be autoloaded before org-switchb is invoked.")
    org-email-link-description-format "E-post %c: %.60s"
    org-startup-align-all-tables t
    org-special-ctrl-a/e t
+   org-yank-adjusted-subtrees t
    org-publish-timestamp-directory (concat user-cache-directory "org-timestamps/")
    org-footnote-fill-after-inline-note-extraction nil
    org-goto-auto-isearch t
