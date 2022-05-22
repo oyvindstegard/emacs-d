@@ -3,7 +3,7 @@
 ;; Listens for suspend and resume signals and runs corresponding
 ;; hook variables.
 
-;; Author: Øyvind Stegard <oyvind.stegard@ifi.uio.no>
+;; Author: Øyvind Stegard <oyvind@stegard.net>
 ;; License: Public domain, use at own risk, no warranties of any kind.
 
 ;; Requires Emacs23 or better with D-Bus bindings and a UPower daemon running.
@@ -17,32 +17,29 @@
 ;; Functions you would like to run when machine is resumed:
 ;; (add-hook 'upower-resume-hook (lambda() (message "Yawn, wake up already ?")))
 
-
 ;; TODO Define appropriate error handling in case bus service is missing.
-
-;; TODO Rename to something else: the name "upower.el" suggests a much more generic
-;; interface to upower, while this code is solely focused on sleep/resume signal
-;; relaying.
 
 (require 'dbus)
 
 (defvar upower-sleep-hook nil
   "Functions called when machine is about to sleep (suspend or hibernate).
-   Machine will suspend in approximately one second from the time hooks in this
-   variable are called.")
+   Machine will suspend in approximately one second from the time
+   hooks in this variable are called.")
 (defvar upower-resume-hook nil
-  "Functions called when machine is resumed (from suspend or hibernate)")
+  "Functions called when machine is resumed (from suspend or
+  hibernate)")
 
 (defun upower-sleep-signal-handler()
-  (message "Received sleep signal, running sleep hooks ..")
+  (message "upower: received sleep signal, running sleep hooks ..")
   (run-hooks 'upower-sleep-hook))
 
 (defun upower-resume-signal-handler()
-  (message "Received resume signal, running resume hooks ..")
+  (message "upower: received resume signal, running resume hooks ..")
   (run-hooks 'upower-resume-hook))
 
 (defun upower-register()
-  "Register signal handlers for sleep/resume. Return list of signal registration objects."
+  "Register signal handlers for sleep/resume. Return list of
+signal registration objects."
   (if (member "PrepareForSleep" (dbus-introspect-get-signal-names :system
                        "org.freedesktop.login1" "/org/freedesktop/login1" "org.freedesktop.login1.Manager"))
       ;; logind Manager interface available, prefer that instead of UPower:
@@ -64,8 +61,8 @@
       'upower-resume-signal-handler))
     ))
   
-; List holding registered dbus signals
-(setq upower-dbus-registration nil)
+(defvar upower-dbus-registration nil
+  "List holding registered dbus signals")
 
 ; Enable integration
 (defun upower-enable()
