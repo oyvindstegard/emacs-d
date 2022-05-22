@@ -500,6 +500,9 @@ temporarily making the buffer local value global."
         transient-history-file (concat user-cache-directory "transient/history.el")
         transient-values-file (concat user-cache-directory "transient/values.el")))
 
+(use-package vc-hooks
+  :init (setq vc-handled-backends '(Git)))
+
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)
