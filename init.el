@@ -6,11 +6,13 @@
 (when (eval-when-compile (version< emacs-version "27"))
   (load (concat user-emacs-directory "early-init.el")))
 
+(require 'myfuncs)
 (defun e28p () "Are we running Emacs 28 ?" (eval-when-compile (not (version< emacs-version "28"))))
+(defun ubuntu-p () "Are we running on Ubuntu ?"
+       (and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID"))))
 
 ;; Configure visuals early.
 (setq custom-theme-directory (concat user-emacs-directory "themes"))
-(require 'myfuncs)
 (defun oyvind/setup-visuals ()
   "Configure theme/faces."
   (menu-bar-mode 0)
@@ -32,8 +34,7 @@
   (set-face-foreground 'lazy-highlight "#ccc")
   (set-face-foreground 'font-lock-comment-face "#cdad00")
 
-  (let ((x-fontname (if (and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID")))
-                        "Ubuntu Mono" "Monospace"))
+  (let ((x-fontname (if (ubuntu-p) "Ubuntu Mono" "Monospace"))
         (w32-fontname "Consolas 10"))
     (setq window-system-default-frame-alist
           (list
@@ -348,9 +349,10 @@ temporarily making the buffer local value global."
   (setq auto-save-file-name-transforms nil ; Never autosave remote files in /tmp on local host
         tramp-persistency-file-name (concat user-cache-directory "tramp")
         tramp-verbose 1)
-  (require 'upower)
-  (add-hook 'upower-sleep-hook 'tramp-cleanup-all-connections)
-  (upower-enable))
+  (when (ubuntu-p)                      ; TODO better test for dbus availability
+    (require 'upower)
+    (add-hook 'upower-sleep-hook 'tramp-cleanup-all-connections)
+    (upower-enable)))
 
 (use-package json-mode
   :defer t
