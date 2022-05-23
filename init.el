@@ -7,9 +7,6 @@
   (load (concat user-emacs-directory "early-init.el")))
 
 (require 'myfuncs)
-(defun e28p () "Are we running Emacs 28 ?" (eval-when-compile (not (version< emacs-version "28"))))
-(defun ubuntu-p () "Are we running on Ubuntu ?"
-       (and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID"))))
 
 ;; Configure visuals early.
 (setq custom-theme-directory (concat user-emacs-directory "themes"))
@@ -58,7 +55,7 @@
 (require 'use-package)
 
 ;; General Emacs Preferences
-(if (e28p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"
+(if (e28-p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"
 
 (defun oyvind/visit-or-kill-init-file ()
   (interactive)
@@ -100,6 +97,11 @@
       kill-buffer-query-functions (delete 'process-kill-buffer-query-function
                                           kill-buffer-query-functions)
       confirm-kill-processes nil
+      ;; Lock files create more troubles than they are worth, especially with
+      ;; TRAMP and remote connections, where lock file PID is tied to connection
+      ;; processes, which routinely get broken and die when machines
+      ;; suspend/resume, resulting in stale lock files.
+      create-lockfiles nil
       visible-cursor nil
       ring-bell-function 'ignore
       tty-menu-open-use-tmm t
@@ -349,7 +351,7 @@ temporarily making the buffer local value global."
   (setq auto-save-file-name-transforms nil ; Never autosave remote files in /tmp on local host
         tramp-persistency-file-name (concat user-cache-directory "tramp")
         tramp-verbose 1)
-  (when (ubuntu-p)                      ; TODO better test for dbus availability
+  (when (and (ubuntu-p) (not (wsl-p)))
     (require 'upower)
     (add-hook 'upower-sleep-hook 'tramp-cleanup-all-connections)
     (upower-enable)))
@@ -458,7 +460,7 @@ temporarily making the buffer local value global."
 
 ;; Prefer built-in project package for Emacs >= 28, projectile otherwise.
 (use-package project
-  :if (e28p)
+  :if (e28-p)
   :init
   (setq project-list-file (concat user-cache-directory "projects"))
   :bind (:map project-prefix-map
@@ -469,7 +471,7 @@ temporarily making the buffer local value global."
   (add-to-list 'project-switch-commands (list 'neotree-show "Neotree") t))
 
 (use-package projectile
-  :unless (e28p)
+  :unless (e28-p)
   :ensure t
   :init (setq projectile-keymap-prefix (kbd "C-c p"))
   (when (file-directory-p "~/dev")
