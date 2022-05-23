@@ -17,8 +17,6 @@
 ;; Functions you would like to run when machine is resumed:
 ;; (add-hook 'upower-resume-hook (lambda() (message "Yawn, wake up already ?")))
 
-;; TODO Define appropriate error handling in case bus service is missing.
-
 (require 'dbus)
 
 (defvar upower-sleep-hook nil
@@ -31,11 +29,13 @@
 
 (defun upower-sleep-signal-handler()
   (message "upower: received sleep signal, running sleep hooks ..")
-  (run-hooks 'upower-sleep-hook))
+  (run-hooks 'upower-sleep-hook)
+  (message "upower: received sleep signal, running sleep hooks ..done"))
 
 (defun upower-resume-signal-handler()
   (message "upower: received resume signal, running resume hooks ..")
-  (run-hooks 'upower-resume-hook))
+  (run-hooks 'upower-resume-hook)
+  (message "upower: received resume signal, running resume hooks ..done"))
 
 (defun upower-register()
   "Register signal handlers for sleep/resume. Return list of
@@ -64,22 +64,21 @@ signal registration objects."
 (defvar upower-dbus-registration nil
   "List holding registered dbus signals")
 
-; Enable integration
 (defun upower-enable()
   "Enable integration with UPower. Does nothing if already enabled."
   (interactive)
   (when (not upower-dbus-registration)
-    (setq upower-dbus-registration
-          (upower-register))
-    (message "Enabled integration with UPower daemon.")))
+    (when (setq upower-dbus-registration
+                (condition-case nil (upower-register)
+                  (dbus-error (message "upower: warn: failed to enable dbus integration") nil)))
+      (message "upower: enabled dbus integration."))))
 
-; Disable integration
 (defun upower-disable()
   "Disable integration with UPower daemon. Does nothing if already disabled."
   (interactive)
   (while upower-dbus-registration
     (dbus-unregister-object (car upower-dbus-registration))
     (setq upower-dbus-registration (cdr upower-dbus-registration)))
-  (message "Disabled integration with UPower daemon."))
+  (message "upower: disabled dbus integration."))
 
 (provide 'upower)
