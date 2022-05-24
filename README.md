@@ -2,8 +2,8 @@
 
 Author: Øyvind Stegard <oyvind@stegard.net>
 
-Compatibility: GNU/Emacs 25.X, 26.X and 27.X, primarily for Linux env, also used
-for plain terminal Emacs on WSL/Windows.
+Compatibility: GNU/Emacs 27.X and 28.X, primarily for Linux env, also used for
+plain terminal Emacs on WSL/Windows.
 
 Utilizes `use-package`, the Emacs package framework and avoids the customize
 facility, preferring to hand code all preferences in `init.el` and related
@@ -13,57 +13,96 @@ specific configuration.
 
 In general, the configuration should boot strap Emacs by automatically
 downloading and byte compiling any packages missing, so the first startup can
-take some time.
+take some time. Currently, an exception to this is the `org` package, which must
+be installed explicitly from `package-list-packages`.
+
+## Cache directory
+
+Instead of cluttering up the root of `~/.emacs.d/`, I try to ensure all packages
+write various cache files and other persistent state to `~/.emacs.d/cache/`
+instead, which also makes [`.gitignore`](.gitignore) simpler.
+
+## Managing Emacs on graphical desktop
+
+I highly recommend running only a single instance of Emacs on the desktop. These
+days, it's as simple as always starting Emacs with:
+
+    emacsclient --alternate-editor= --create-frame ...
+    
+This command automatically starts Emacs as a daemon, if it's not already
+running, and pops up an new frame. The key is the rather strange
+`--alternate-editor=` argument, which is documented
+[here](https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html):
+
+> As a special exception, if command is the empty string, then emacsclient
+> starts Emacs in daemon mode (as ‘emacs --daemon’) and then tries connecting
+> again.
+
+Emacs 28 also ships with a desktop file that does this for you, named "Emacs (client)":
+
+    /usr/share/applications/emacsclient28.desktop
 
 
-# Code
+## [`early-init.el`](early-init.el) vs [`init.el`](init.el)
 
-## el/
+I strive to keep [`early-init.el`](early-init.el) as small as possible, keeping
+only the most basic settings and boot strapping code in this file. I also try to
+optimize startup time, primarily with `use-package` and always preferring lazy
+load, but also by byte compiling some personal library code and the init file
+itself.
 
-Some reusable library code may be found under the `el` subdirectory of this
-repository.
+## Code under [`el/`](el/)
 
-## bin/ec (emacsclient wrapper)
+Some reusable library code may be found under the [`el/`](el/) subdirectory of
+this repository.
 
-Emacsclient wrapper shell script for managing a single Emacs instance under X
-and/or in daemon mode. I like to keep only a single Emacs instance running,
-while at the same time using several frames/windows spread over multiple
-desktops/viewports. To manage this the way I like, I made en emacsclient wrapper
-script. It automatically starts Emacs if not already running, and it has a few
-custom options and work-arounds for issues that have annoyed me.
+### [`el/tod.el`](el/tod.el)
 
-The option --select-frame-dwim can be used to select/focus an Emacs frame on the 
-currently visible X desktop/viewport, which is handy when opening files from a 
-terminal window. It is also nice to use when emacsclient is launched by file 
-manager, webbrowser, etc.. It avoids the file popping up in an Emacs frame on 
-some other random desktop. If there is no frame on the current desktop/viewport, 
-then a new frame is created. It can be configured to avoid selecting frames with 
-names matching a regexp (see top of script). For other custom options, see 
---help.
+Functions dealing with time of day. I use these as part of my personal work time
+logging system.
 
-Some examples of how I've integrated this on my desktop:
+### [`el/upower.el`](el/upower.el)
 
-* Bound Win+E to launch emacsclient --create-frame in window manager.
-* Bound Shift+Win+E (or "s-E") to function `delete-frame' in Emacs.
-* Bound Ctrl+Win+E to launch emacsclient --select-frame-dwim in window 
-  manager. This gives me a quick keyboard shortcut to focus an Emacs frame on 
-  the current viewport.
-* Use "emacsclient --select-frame-dwim %F" as the "Exec="-line in the Emacs 
-  .desktop file.
-* Set command emacsclient --mailto %u as defalt mailto: link handler.
-* Bound Win+G to command emacsclient -n -e '(switch-to-gnus)' in window 
-  manager. This uses emacsclient to call my custom Gnus startup function. (If 
-  Gnus is already started, then the Gnus frame is activated, so window manager 
-  will jump to it and give it focus.)
+Simple integration with upower daemon for Emacs. See source for doc.
 
-I use the following shell aliases:
+I use this mainly to properly shut down various network connections (such as
+TRAMP) on suspend of computer, since they tend to hang after resume otherwise.
 
-    alias e='ec --select-frame-dwim'
-    alias en='ec -n --select-frame-dwim'
-    alias et='ec -t'
-        
+## [`el/nm.el`](el/nm.el)
 
-## el/gcontacts-get.el
+NetworkManager integration for Emacs. See source for doc.
+
+## [`el/notify.el`](el/notify.el)
+
+Very simplistic Freedesktop notifications for Emacs. See source for doc.
+
+*Deprecated*: Emacs now has built-in support for such notifications, and you 
+should use that instead:
+http://www.gnu.org/software/emacs/manual/html_node/elisp/Desktop-Notifications.html
+
+
+### el/mailto-url-gnus.el
+
+*Deprecated: I stopped using Gnus for e-mail a long time ago*
+
+Mailto URL handler function for Gnus+message mode. Parses mailto-links and sets
+up a new mail message. Supports most common fields including attachments. Can be
+used to integrate Gnus as a regular mailto-handler:
+
+    #!/bin/sh
+    # Use Gnus as mailto: handler
+    url="$1"
+
+    type emacsclient 1>/dev/null 2>&1 || { echo "Error: emacsclient command is required."; exit 1; }
+
+    exec emacsclient -a "" -n -c -e "(mailto-url-gnus \"$url\" t t)"
+
+See source code for further documentation.
+
+
+### el/gcontacts-get.el
+
+*Deprecated: I haven't tested gcontacts-get in ages, and it is likely broken.*
 
 A small library to fetch GMail/Google contacts over HTTP into Emacs. I wanted an
 easy way to sync up my BBDB address book. The code is currently in beta state,
@@ -125,41 +164,3 @@ database.
 
 
 
-## el/mailto-url-gnus.el
-
-Mailto URL handler function for Gnus+message mode. Parses mailto-links and sets
-up a new mail message. Supports most common fields including attachments. Can be
-used to integrate Gnus as a regular mailto-handler:
-
-    #!/bin/sh
-    # Use Gnus as mailto: handler
-    url="$1"
-
-    type emacsclient 1>/dev/null 2>&1 || { echo "Error: emacsclient command is required."; exit 1; }
-
-    exec emacsclient -a "" -n -c -e "(mailto-url-gnus \"$url\" t t)"
-
-See source code for further documentation.
-
-
-## el/nm.el
-
-NetworkManager integration for Emacs. See source for doc.
-
-
-## el/notify.el
-
-Very simplistic Freedesktop notifications for Emacs. See source for doc.
-
-*Deprecated*: Emacs now has built-in support for such notifications, and you 
-should use that instead:
-http://www.gnu.org/software/emacs/manual/html_node/elisp/Desktop-Notifications.html
-
-
-
-## el/upower.el
-
-Simple integration with upower daemon for Emacs. See source for doc.
-
-I use this mainly to properly shut down any Gnus server connections on suspend 
-of computer, since they tend to hang after resume otherwise.
