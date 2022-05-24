@@ -60,9 +60,11 @@
 (defun oyvind/visit-or-kill-init-file ()
   (interactive)
   (if (equal (buffer-file-name) user-init-file)
-      (kill-buffer)
-    (find-file user-init-file)
-    (add-hook 'after-save-hook (lambda() (byte-compile-file user-init-file)) nil t)))
+      (progn
+        (when (yes-or-no-p (format "Byte compile %s before close ? " (file-name-nondirectory user-init-file)))
+          (byte-compile-file user-init-file))
+        (kill-buffer))
+    (find-file user-init-file)))
 
 (global-set-key (kbd "s-E") 'delete-frame) ; Make Win+Shift+e kill frame
 (global-set-key (kbd "C-c f") 'auto-fill-mode)
