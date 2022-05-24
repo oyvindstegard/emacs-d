@@ -62,7 +62,9 @@
   (if (equal (buffer-file-name) user-init-file)
       (progn
         (when (yes-or-no-p (format "Byte compile %s before close ? " (file-name-nondirectory user-init-file)))
-          (byte-compile-file user-init-file))
+          (when (byte-compile-file user-init-file)
+            (sit-for 1)
+            (delete-window (get-buffer-window "*Compile-Log*"))))
         (kill-buffer))
     (find-file user-init-file)))
 
