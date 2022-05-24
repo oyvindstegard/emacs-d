@@ -370,6 +370,10 @@ temporarily making the buffer local value global."
   (add-hook 'js2-mode-hook #'js2-refactor-mode)
   (js2r-add-keybindings-with-prefix "C-c r"))
 
+(use-package multiple-cursors
+  :defer t
+  :custom (mc/list-file (concat user-cache-directory "mc-lists.el")))
+
 (use-package expand-region
   :ensure t
   :after js2-mode
@@ -418,7 +422,7 @@ temporarily making the buffer local value global."
   :defer t)
 
 ;; Testing hydra
-(use-package hydra
+(use-package hydra :pin gnu
   :ensure t)
 
 (use-package php-mode
