@@ -320,9 +320,7 @@ temporarily making the buffer local value global."
   :config
   (setq shell-completion-fignore '(".git" "#" "~" "%")
         explicit-shell-file-name "/bin/bash")
-  ;; NB Expects prompt (mostly) free of ANSI escape sequences:
-  (setq-default dirtrack-list '("^\\(([a-z0-9-]+) \\)?[a-z]*@[a-z0-9]+[[:space:]:]?\\([^$[]+\\)" 2))
-  ;; TODO: use OSC escapes to inform Emacs about shell working dir
+  (setq-default dirtrack-list '("\\([/~][^$[]*\\)[$#[]" 1))
   :hook ((shell-mode . dirtrack-mode)
          (shell-mode . (lambda()(shell-dirtrack-mode -1)))))
 
