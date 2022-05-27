@@ -718,7 +718,7 @@ shall not be autoloaded before org-switchb is invoked.")
 			            (setq regexps (cdr regexps)))
 		              match))
 	      (bury-buffer (find-file-noselect (car org-files) t))
-          (message "Loading org file %s ..done" (car org-files)))
+          (message "Loading org file %s ...done" (car org-files)))
 	    (setq org-files (cdr org-files)))))
 
   (advice-add 'org-switchb :before #'org-switchb--preload-some-org-buffers)
