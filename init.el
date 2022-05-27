@@ -665,7 +665,7 @@ shall not be autoloaded before org-switchb is invoked.")
 %?%^T
 " :prepend t :jump-to-captured t)
 
-     ("j" "Journal"
+     ("n" "Nytt notat i privat journal"
       entry (file+function "journal.org" org-reverse-datetree-goto-date-in-file)
       "* %?" :jump-to-captured t))
    
