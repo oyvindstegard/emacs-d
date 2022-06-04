@@ -57,15 +57,21 @@
 ;; General Emacs Preferences
 (if (e28-p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"
 
+;; init file management
+(defun oyvind/ask-byte-recompile-init-file ()
+  (interactive)
+  (let ((user-init-file-c (concat user-init-file "c")))
+    (if (or (not (file-exists-p user-init-file-c))
+              (file-newer-than-file-p user-init-file user-init-file-c))
+      (if (yes-or-no-p (format "Byte compile %s before exit ? "
+                                 (file-name-nondirectory user-init-file)))
+          (byte-compile-file user-init-file) t)
+      t)))
+(add-hook 'kill-emacs-query-functions 'oyvind/ask-byte-recompile-init-file)
 (defun oyvind/visit-or-kill-init-file ()
   (interactive)
   (if (equal (buffer-file-name) user-init-file)
-      (progn
-        (when (yes-or-no-p (format "Byte compile %s before close ? " (file-name-nondirectory user-init-file)))
-          (when (byte-compile-file user-init-file)
-            (sit-for 1)
-            (delete-window (get-buffer-window "*Compile-Log*"))))
-        (kill-buffer))
+      (kill-buffer)
     (find-file user-init-file)))
 
 (global-set-key (kbd "s-E") 'delete-frame) ; Make Win+Shift+e kill frame
