@@ -123,7 +123,8 @@
       undo-outer-limit 30000000
       large-file-warning-threshold 104857600
       message-log-max 10000
-      make-backup-files nil
+      backup-by-copying t
+      backup-enable-predicate (lambda(name) nil) ; default to backups off
       uniquify-buffer-name-style 'forward
       require-final-newline nil
       sentence-end-double-space nil
@@ -604,7 +605,10 @@ shall not be autoloaded before org-switchb is invoked.")
   (add-hook 'local-init-file-after-hook
             (lambda()
               (setq org-directory (or org-directory-local-override org-directory)
-                    org-default-notes-file (concat org-directory "journal.org"))))
+                    org-default-notes-file (concat org-directory "journal.org"))
+              (setq backup-enable-predicate
+                    (lambda (name)
+                      (if (string-prefix-p org-directory name) t nil)))))
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c o l" . org-store-link)
 	     ("C-c o a" . org-agenda)
