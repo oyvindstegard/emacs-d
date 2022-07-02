@@ -21,7 +21,7 @@
           (horizontal-scroll-bars . nil)
           (menu-bar-lines . 0))
         default-frame-alist initial-frame-alist)
-  
+
   (load-theme 'wombat)
   (set-face-background 'default "#111")
   (set-face-background 'cursor "#c96")
@@ -63,7 +63,7 @@
   (let ((user-init-file-c (concat user-init-file "c")))
     (if (or (not (file-exists-p user-init-file-c))
               (file-newer-than-file-p user-init-file user-init-file-c))
-      (if (yes-or-no-p (format "Byte compile %s before exit ? "
+      (if (yes-or-no-p (format "Byte compile %s ? "
                                  (file-name-nondirectory user-init-file)))
           (byte-compile-file user-init-file) t)
       t)))
@@ -71,7 +71,9 @@
 (defun oyvind/visit-or-kill-init-file ()
   (interactive)
   (if (equal (buffer-file-name) user-init-file)
-      (kill-buffer)
+      (progn
+        (kill-buffer)
+        (oyvind/ask-byte-recompile-init-file))
     (find-file user-init-file)))
 
 (global-set-key (kbd "s-E") 'delete-frame) ; Make Win+Shift+e kill frame
@@ -300,7 +302,7 @@
         (concat comint-password-prompt-regexp
                 "\\|^SSH password:\\s *\\'"
                 "\\|^SUDO password:\\s *\\'"))
-  
+
   (defadvice comint-read-input-ring (around comint-read-input-ring-AROUND activate)
     "Make `comint-read-input-ring' work when variable
 `comint-input-ring-separator' has buffer local value, by
@@ -666,7 +668,7 @@ shall not be autoloaded before org-switchb is invoked.")
       entry (id "ef1e5253-3681-4189-857f-814ca5e97b95")
       "* TODO %?
 %u" :prepend t :jump-to-captured t)
-     
+
      ("k" "Nytt innslag i privat kalender"
       entry (id "d5b3a45b-65c6-4fc4-9d99-edd60a4fe5c9")
       "* %^{Tittel}
@@ -679,7 +681,7 @@ shall not be autoloaded before org-switchb is invoked.")
      ("n" "Nytt notat i privat journal"
       entry (file+function "journal.org" org-reverse-datetree-goto-date-in-file)
       "* %?" :jump-to-captured t))
-   
+
    org-src-fontify-natively t
    org-edit-src-content-indentation 0
    ;; Global export settings
@@ -747,7 +749,7 @@ shall not be autoloaded before org-switchb is invoked.")
                          ("to." . 4)("fr." . 5)("lø." . 6)
 					     ("søndag" . 0)("mandag" . 1)("tirsdag" . 2)("onsdag" . 3)
 					     ("torsdag" . 4)("fredag" . 5)("lørdag" . 6)))
-	   
+
            parse-time-months (append parse-time-months
 				     '(("januar" . 1)("februar" . 2)("mars" . 3)
 				       ("april" . 4)("juni" . 6)("juli" . 7)
