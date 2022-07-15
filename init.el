@@ -85,8 +85,9 @@
 (global-set-key (kbd "M-I") 'tab-to-tab-stop)
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
 (global-set-key (kbd "<f5>") 'compile)
-(global-set-key (kbd "<f6>") 'next-error)
-(global-set-key (kbd "<S-f6>") 'previous-error)
+(global-set-key (kbd "<f6>") 'recompile)
+(global-set-key (kbd "<f7>") 'previous-error)
+(global-set-key (kbd "<f8>") 'next-error)
 (global-set-key (kbd "<f12>") 'save-buffers-kill-emacs)
 (global-set-key (kbd "C-c i") 'oyvind/visit-or-kill-init-file)
 
@@ -509,7 +510,7 @@ temporarily making the buffer local value global."
 
 (use-package neotree
   :ensure t
-  :bind (([f8] . neotree-toggle))
+  :bind (([f9] . neotree-toggle))
   :config
   (setq neo-theme 'arrow))
 
