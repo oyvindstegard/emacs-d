@@ -534,9 +534,10 @@ temporarily making the buffer local value global."
 	      ("C-p". company-select-previous)
 	      ("M-<". company-select-first)
 	      ("M->". company-select-last))
-  )
+  :bind (:map company-mode-map ("C-/" . company-complete)))
 
 (use-package yasnippet
+  ;; TODO copy snippets from https://github.com/rksm/emacs-rust-config/tree/master/snippets/rustic-mode
   :ensure
   :config
   (yas-reload-all)
