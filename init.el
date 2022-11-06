@@ -513,6 +513,7 @@ temporarily making the buffer local value global."
   (lsp-rust-analyzer-display-parameter-hints nil)
   (lsp-rust-analyzer-display-reborrow-hints nil)
   :config
+  (setq lsp-session-file (concat user-cache-directory (file-name-nondirectory lsp-session-file)))
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package lsp-ui
