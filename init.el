@@ -499,6 +499,8 @@ temporarily making the buffer local value global."
 (use-package lsp-mode
   :ensure
   :commands lsp
+  :init
+  (setq lsp-keymap-prefix "C-c l")
   :custom
   ;; what to use when checking on-save. "check" is default, I prefer clippy
   (lsp-rust-analyzer-cargo-watch-command "clippy")
