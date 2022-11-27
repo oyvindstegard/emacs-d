@@ -670,6 +670,10 @@ temporarily making the buffer local value global."
 (use-package unfill-paragraph
   :bind ("M-Q" . unfill-paragraph))
 
+(use-package calendar
+  :defer t
+  :config (setq calendar-week-start-day 1))
+
 ;; NB ! Org-mode must be installed manunally using package.el on first time init !
 ;; use-package will not automatically download org-mode from package archive due to
 ;; issues with builtin vs external.
