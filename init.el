@@ -667,6 +667,10 @@ temporarily making the buffer local value global."
        (set-buffer fortune-buffer-name)
        (buffer-string))))
 
+(use-package ascii-table
+  :ensure t
+  :commands (ascii-table))
+
 (use-package unfill-paragraph
   :bind ("M-Q" . unfill-paragraph))
 
