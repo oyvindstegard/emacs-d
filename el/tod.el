@@ -1,4 +1,4 @@
-;;; tod.el - misc time stuff
+;;; tod.el - Misc Time of Day stuff
 ;;
 ;; Functions I use as part of my work time logging.
 
@@ -31,7 +31,8 @@ formatted correctly, then nil is returned."
         (/ (round (* (/ (- total-minutes-later total-minutes-earlier) 60.0) 100)) 100.0))))
 
 (defun tod-get-hhmm (&optional round)
-  "Get current time of day as %H:%M. Optionally ROUND to given number of minutes (1-60 only)."
+  "Get current time of day as %H:%M. Optionally ROUND to given
+number of minutes (1-60 only)."
   (interactive)
   (let* ((curtime (decode-time (current-time)))
          (cursecs (car curtime))
