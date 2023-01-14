@@ -863,6 +863,9 @@ shall not be autoloaded before org-switchb is invoked.")
   :ensure t
   :after org)
 
+(use-package tod
+  :after org)
+
 ;; custom.el
 (when (file-readable-p custom-file) (load custom-file))
 
