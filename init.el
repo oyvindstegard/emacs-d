@@ -366,7 +366,13 @@ temporarily making the buffer local value global."
   (when (and (ubuntu-p) (not (wsl-p)))
     (require 'upower)
     (add-hook 'upower-sleep-hook 'tramp-cleanup-all-connections)
+    (add-hook 'upower-sleep-hook 'password-reset)
     (upower-enable)))
+
+(use-package password-cache
+  :after tramp
+  :config
+  (setq password-cache-expiry 7200))
 
 (use-package json-mode
   :defer t
