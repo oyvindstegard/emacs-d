@@ -577,6 +577,12 @@ temporarily making the buffer local value global."
   (add-to-list 'project-switch-commands (list 'magit-status "Magit status") t)
   (add-to-list 'project-switch-commands (list 'neotree-show "Neotree") t))
 
+(use-package dumb-jump
+  :ensure
+  :after xref
+  :init
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
 (use-package projectile
   :unless (e28-p)
   :ensure t
