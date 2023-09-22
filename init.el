@@ -48,9 +48,11 @@
 (add-hook 'server-after-make-frame-hook (lambda() (select-frame-set-input-focus (selected-frame))))
 
 ;; Boot strap package and use-package
-(package-initialize)                    ; early-init.el sets package-enable-at-startup to nil
+(package-initialize) ; early-init.el sets `package-enable-at-startup' to nil
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
 
@@ -174,6 +176,12 @@
 	    recentf-save-file (concat user-cache-directory "recentf")
         recentf-exclude '("Privat", "\\.emacs\\.d/elpa/"))
   (recentf-mode 1))
+
+(use-package multisession
+  :if (e29-p)
+  :defer t
+  :config
+  (setq multisession-directory (concat user-cache-directory "multisession")))
 
 (use-package bookmark
   :defer t
@@ -690,13 +698,17 @@ temporarily making the buffer local value global."
   :defer t
   :config (setq calendar-week-start-day 1))
 
-;; NB ! Org-mode must be installed manunally using package.el on first time init !
-;; use-package will not automatically download org-mode from package archive due to
-;; issues with builtin vs external.
 (use-package org :pin "gnu"
-  :ensure t
   :ensure htmlize
   :init
+  (when (not (seq-find
+              (lambda(dentry) (string-match-p "^org-" dentry))
+              (directory-files package-user-dir)))
+    ;; Orgmode not installed from archive yet; probably boot-strapping.
+    ;; Do package installation with upgrade of built-in.
+    (let ((package-install-upgrade-built-in t))
+      (package-install 'org)))
+  
   (defvar org-directory-local-override nil
     "Override default `org-directory' by local configuration.")
   (defvar org-switchb-extra-org-paths nil
@@ -768,6 +780,9 @@ shall not be autoloaded before org-switchb is invoked.")
    org-refile-target-verify-function (lambda()
 					                   "Exclude todo keywords with a done state from refile targets"
 					                   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+   ;; Workaround for https://lists.gnu.org/archive/html/emacs-orgmode/2023-05/msg00383.html
+   org-element-use-cache nil
 
    org-capture-templates
    '(("o" "Oppgave"
@@ -869,7 +884,7 @@ shall not be autoloaded before org-switchb is invoked.")
 (use-package org-id
   :after org
   :init (setq org-id-locations-file (concat user-cache-directory "org-id-locations"))
-  :bind ("C-c o i" . org-id-get-create))
+  :bind (:map org-mode-map ("C-c o i" . org-id-get-create)))
 
 (use-package org-reverse-datetree
   :ensure t
