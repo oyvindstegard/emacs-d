@@ -44,6 +44,8 @@ https://www.freedesktop.org/software/systemd/man/os-release.html"
 
 (defun e28-p () "Are we running Emacs 28 or newer ?"
        (eval-when-compile (not (version< emacs-version "28"))))
+(defun e29-p () "Are we running Emacs 29 or newer ?"
+       (eval-when-compile (not (version< emacs-version "29"))))
 
 (defun ubuntu-p () "Are we running on Ubuntu ?"
        (and (eq system-type 'gnu/linux) (equal "ubuntu" (linux-os-release-field "ID"))))
