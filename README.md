@@ -2,8 +2,8 @@
 
 Author: Øyvind Stegard <oyvind@stegard.net>
 
-Compatibility: GNU/Emacs 27.X and 28.X, primarily for Linux env, also used for
-plain terminal Emacs on WSL/Windows.
+Compatibility: GNU/Emacs 27.X, 28.X, 29.X, primarily for graphical Linux
+environment, but also used for plain terminal Emacs on WSL/Windows.
 
 Utilizes `use-package`, the Emacs package framework and avoids the customize
 facility, preferring to hand code all preferences in `init.el` and related
@@ -13,8 +13,7 @@ specific configuration.
 
 In general, the configuration should boot strap Emacs by automatically
 downloading and byte compiling any packages missing, so the first startup can
-take some time. Currently, an exception to this is the `org` package, which must
-be installed explicitly from `package-list-packages`.
+take some time.
 
 ## Cache directory
 
@@ -38,9 +37,9 @@ running, and pops up an new frame. The key is the rather strange
 > starts Emacs in daemon mode (as ‘emacs --daemon’) and then tries connecting
 > again.
 
-Emacs 28 also ships with a desktop file that does this for you, named "Emacs (client)":
+Emacs also ships with a desktop file that does this for you, named "Emacs (client)":
 
-    /usr/share/applications/emacsclient28.desktop
+    /usr/share/applications/emacs.desktop
 
 
 ## [`early-init.el`](early-init.el) vs [`init.el`](init.el)
@@ -161,6 +160,3 @@ database.
       (gcontacts-get-merge-with-bbdb (gcontacts-get)))
     ;; Please read warning about function `gcontacts-get-merge-with-bbdb' in top
     ;; of gcontacts-get.el file.
-
-
-
