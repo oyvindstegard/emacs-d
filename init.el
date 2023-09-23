@@ -696,7 +696,19 @@ temporarily making the buffer local value global."
 
 (use-package calendar
   :defer t
-  :config (setq calendar-week-start-day 1))
+  :config
+  (setq calendar-week-start-day 1)
+  ;; From https://www.emacswiki.org/emacs/CalendarWeekNumbers
+  (copy-face font-lock-constant-face 'calendar-iso-week-face)
+  (set-face-attribute 'calendar-iso-week-face nil
+                      :height 0.7)
+  (setq calendar-intermonth-text
+        '(propertize
+          (format "%2d"
+                  (car
+                   (calendar-iso-from-absolute
+                    (calendar-absolute-from-gregorian (list month day year)))))
+          'font-lock-face 'calendar-iso-week-face)))
 
 (use-package org :pin "gnu"
   :ensure htmlize
