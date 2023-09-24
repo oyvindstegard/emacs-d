@@ -229,7 +229,9 @@
 (use-package ace-window
   :ensure t
   :bind ("M-o" . ace-window)
-  :config (setq aw-scope 'frame))
+  :config
+  (setq aw-scope 'frame
+        aw-char-position 'left))
 
 (use-package ace-jump-mode
   :ensure t
@@ -547,10 +549,10 @@ temporarily making the buffer local value global."
   ;; (company-begin-commands nil) ;; uncomment to disable popup
   :bind
   (:map company-active-map
-	      ("C-n". company-select-next)
-	      ("C-p". company-select-previous)
-	      ("M-<". company-select-first)
-	      ("M->". company-select-last))
+	      ("C-n" . company-select-next)
+	      ("C-p" . company-select-previous)
+	      ("M-<" . company-select-first)
+	      ("M->" . company-select-last))
   :bind (:map company-mode-map ("C-/" . company-complete)))
 
 (use-package yasnippet
