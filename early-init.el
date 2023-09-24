@@ -1,8 +1,10 @@
 ;; -*- coding: utf-8; mode: emacs-lisp -*-
 ;;
-;; Init speed hack
-(setq gc-cons-threshold 128000000)
-(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
+;; Temporarily increase GC threshold during init, set back to desired value
+;; after completion. Permanently increase the rather small default value of
+;; 800kB to 50 MiB. (Reduce if prolonged pauses/lags occur during use of Emacs.)
+(setq gc-cons-threshold (* 256 1024 1024))
+(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold (* 50 1024 1024))))
 
 ;; Basic boot strapping settings
 (setq user-full-name "Øyvind Stegard"
