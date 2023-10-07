@@ -594,8 +594,9 @@ temporarily making the buffer local value global."
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (use-package projectile
+  :disabled
   :unless (e28-p)
-  :ensure t
+  :ensure nil
   :init (setq projectile-keymap-prefix (kbd "C-c p"))
   (when (file-directory-p "~/dev")
     (setq projectile-project-search-path '("~/dev")))
