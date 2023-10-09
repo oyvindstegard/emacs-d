@@ -558,6 +558,7 @@ temporarily making the buffer local value global."
 (use-package yasnippet
   ;; TODO copy snippets from https://github.com/rksm/emacs-rust-config/tree/master/snippets/rustic-mode
   :ensure
+  :defer 5
   :config
   (yas-reload-all)
   (add-hook 'prog-mode-hook 'yas-minor-mode)
