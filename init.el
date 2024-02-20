@@ -721,7 +721,7 @@ temporarily making the buffer local value global."
   :ensure htmlize
   :init
   (when (not (seq-find
-              (lambda(dentry) (string-match-p "^org-" dentry))
+              (lambda(dentry) (string-match-p "^org-[0-9.]+$" dentry))
               (directory-files package-user-dir)))
     ;; Orgmode not installed from archive yet; probably boot-strapping.
     ;; Do package installation with upgrade of built-in.
