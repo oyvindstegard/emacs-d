@@ -659,8 +659,11 @@ temporarily making the buffer local value global."
 
 (use-package cc-mode
   :defer t
-  :hook (c-mode-common . (lambda()
-                           (local-set-key  (kbd "C-c h") 'ff-find-other-file))))
+  :hook ((c-mode-common . (lambda() (local-set-key  (kbd "C-c h") 'ff-find-other-file)))
+         (c-mode-common . electric-pair-local-mode))
+  :config (setq
+           c-basic-offset 4
+           c-default-style "java"))
 
 (use-package etags
   :defer t
