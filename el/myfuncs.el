@@ -57,4 +57,23 @@ https://www.freedesktop.org/software/systemd/man/os-release.html"
                               (search-forward "Microsoft" nil t))
             t))
 
+;; clock-jump
+(defvar clock-jump-detector-hook nil
+  "Functions to run when a system clock jump is detected.")
+(defvar clock-jump-detector-threshold (* 5 60)
+  "Minimum time skip (in seconds) to consider it a system clock
+jump. When it is detected that the system clock jumps with more
+than this number of seconds, then hooks in
+`clock-jump-detector-hook' are run.")
+(setq clock-jump-detector-time (current-time))
+(defun clock-jump-detector ()
+  (let ((time-passed (float-time (time-since clock-jump-detector-time))))
+    (when (> time-passed clock-jump-detector-threshold)
+      (message "Clock jump of %f seconds detected, running hooks .." time-passed)
+      (run-hooks 'clock-jump-detector-hook))
+    (setq clock-jump-detector-time (current-time))))
+(run-at-time t 15 'clock-jump-detector)
+;; end clock-jump-detector
+
+
 (provide 'myfuncs)
