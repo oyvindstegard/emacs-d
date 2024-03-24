@@ -71,7 +71,6 @@ it a system clock jump. When it is detected that the system clock jumps with mor
       (message "Clock jump of %f seconds detected, running hooks .." time-passed)
       (run-hooks 'clock-jump-detector-hook))))
 (defun clock-jump-detector-enable ()
-  (interactive)
   (run-at-time t 15 'clock-jump-detector)
   (message "Clock jump detector enabled with threshold %f seconds."
            clock-jump-detector-threshold))
