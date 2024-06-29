@@ -16,6 +16,7 @@
 /local
 /custom.el
 /session.*
+/tree-sitter
 /.org-id-locations
 #*
 .#*
