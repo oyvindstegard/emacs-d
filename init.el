@@ -878,9 +878,11 @@ shall not be autoloaded before org-switchb is invoked.")
     "Revisits all opened org-files that are remote, e.g. /ssh:..."
     (let* ((remote_orgbuffers (seq-filter (lambda(b) (string-match "^/ssh:" (buffer-file-name b))) (org-buffer-list 'files t)))
            (orgfiles (mapcar (lambda(b) (buffer-file-name b)) remote_orgbuffers)))
-      (while orgfiles
-        (find-file-noselect (car orgfiles))
-        (setq orgfiles (cdr orgfiles)))))
+      (when orgfiles
+        (message "Revisiting %d remote org file(s)..." (length orgfiles)))
+      (dolist (orgfile orgfiles) (find-file-noselect orgfile))
+      (when orgfiles
+        (message "Revisiting %d remote org file(s)...done" (length orgfiles)))))
 
   (advice-add 'org-switchb :before #'org-switchb--preload-some-org-buffers)
 
