@@ -789,6 +789,7 @@ shall not be autoloaded before org-switchb is invoked.")
    org-special-ctrl-a/e t
    org-yank-adjusted-subtrees t
    org-publish-timestamp-directory (concat user-cache-directory "org-timestamps/")
+   org-persist-directory (concat user-cache-directory "org-persist/")
    org-footnote-fill-after-inline-note-extraction nil
    org-goto-auto-isearch t
    org-enforce-todo-dependencies t
@@ -801,12 +802,12 @@ shall not be autoloaded before org-switchb is invoked.")
 					                   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
    ;; Workaround for https://lists.gnu.org/archive/html/emacs-orgmode/2023-05/msg00383.html
-   org-element-use-cache nil
+   ;; org-element-use-cache nil
 
    org-capture-templates
    '(("o" "Oppgave"
       entry (id "ef1e5253-3681-4189-857f-814ca5e97b95")
-      "* TODO %?
+      "* TODO %? %^g
 %u" :prepend t :jump-to-captured t)
 
      ("k" "Nytt innslag i privat kalender"
@@ -820,7 +821,7 @@ shall not be autoloaded before org-switchb is invoked.")
 
      ("n" "Nytt notat i privat journal"
       entry (file+function "journal.org" org-reverse-datetree-goto-date-in-file)
-      "* %?" :jump-to-captured t))
+      "* %? %^g" :jump-to-captured t))
 
    org-src-fontify-natively t
    org-edit-src-content-indentation 0
