@@ -877,7 +877,8 @@ shall not be autoloaded before org-switchb is invoked.")
 
   (defun org-revisit-remote-org-files ()
     "Revisits all opened org-files that are remote, e.g. /ssh:..."
-    (let* ((remote_orgbuffers (seq-filter (lambda(b) (string-match "^/ssh:" (buffer-file-name b))) (org-buffer-list 'files t)))
+    (let* ((use-dialog-box nil)
+           (remote_orgbuffers (seq-filter (lambda(b) (string-match "^/ssh:" (buffer-file-name b))) (org-buffer-list 'files t)))
            (orgfiles (mapcar (lambda(b) (buffer-file-name b)) remote_orgbuffers)))
       (when orgfiles
         (message "Revisiting %d remote org file(s)..." (length orgfiles)))
