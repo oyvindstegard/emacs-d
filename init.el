@@ -581,12 +581,18 @@ temporarily making the buffer local value global."
   :if (e28-p)
   :init
   (setq project-list-file (concat user-cache-directory "projects"))
+  (defun project-magit-status () (interactive)
+         (let ((default-directory (project-root (project-current t))))
+           (magit-status)))
+  (defun project-neotree-show () (interactive)
+         (let ((default-directory (project-root (project-current t))))
+           (neotree-show)))
   :bind (:map project-prefix-map
-              ("n" . neotree-show)
-              ("m" . magit-status))
+              ("n" . project-neotree-show)
+              ("m" . project-magit-status))
   :config
-  (add-to-list 'project-switch-commands (list 'magit-status "Magit status") t)
-  (add-to-list 'project-switch-commands (list 'neotree-show "Neotree") t))
+  (add-to-list 'project-switch-commands (list 'project-magit-status "Magit status") t)
+  (add-to-list 'project-switch-commands (list 'project-neotree-show "Neotree") t))
 
 (use-package dumb-jump
   :ensure
