@@ -594,6 +594,16 @@ temporarily making the buffer local value global."
   (add-to-list 'project-switch-commands (list 'project-magit-status "Magit status") t)
   (add-to-list 'project-switch-commands (list 'project-neotree-show "Neotree") t))
 
+(use-package desktop
+  :config
+  (setq desktop-path (list user-cache-directory)
+        desktop-base-file-name "emacs.desktop"))
+
+(use-package url
+  :config
+  (setq url-cache-directory (concat user-cache-directory "url/cache")
+        url-cookie-file (concat user-cache-directory "url/cookies")))
+
 (use-package dumb-jump
   :ensure
   :after xref
