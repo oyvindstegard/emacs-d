@@ -311,8 +311,7 @@
   :config
   (setq comint-password-prompt-regexp
         (concat comint-password-prompt-regexp
-                "\\|^SSH password:\\s *\\'"
-                "\\|^SUDO password:\\s *\\'"))
+                "\\|^\\(SSH\\|SUDO\\|BECOME\\) password:\\s *\\'"))
 
   (defadvice comint-read-input-ring (around comint-read-input-ring-AROUND activate)
     "Make `comint-read-input-ring' work when variable
