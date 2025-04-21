@@ -28,6 +28,9 @@ intialization.")
 
 (make-directory user-cache-directory t)
 
+;; Native compilation path
+(startup-redirect-eln-cache (concat user-cache-directory "eln"))
+
 ;; Custom public libs
 (push (concat user-emacs-directory "el") load-path)
 (byte-recompile-directory (concat user-emacs-directory "el") 0)

@@ -1,4 +1,4 @@
-;; -*- coding: utf-8; mode: emacs-lisp -*-
+;; -*- coding: utf-8; mode: emacs-lisp; lexical-binding: t -*-
 ;;
 ;; See early-init.el for code running before this init code. Early-init is loaded
 ;; automatically for Emacs >= 27. For older Emacs, manual load must happen.
@@ -35,6 +35,7 @@
         (w32-fontname "Consolas 10"))
     (setq window-system-default-frame-alist
           (list
+           (cons 'pgtk (list (cons 'font x-fontname)))
            (cons 'x (list (cons 'font x-fontname)))
            (cons 'w32 (list (cons 'font w32-fontname)))))
     ;; Reset fixed pitch font, which is sometimes wrong if Emacs has been
@@ -129,7 +130,7 @@
       large-file-warning-threshold 104857600
       message-log-max 10000
       backup-by-copying t
-      backup-enable-predicate (lambda(name) nil) ; default to backups off
+      backup-enable-predicate #'(lambda(name) nil) ; default to backups off
       uniquify-buffer-name-style 'forward
       require-final-newline nil
       sentence-end-double-space nil
@@ -174,7 +175,7 @@
   (setq recentf-max-saved-items 1000
         recentf-max-menu-items 50
 	    recentf-save-file (concat user-cache-directory "recentf")
-        recentf-exclude '("Privat", "\\.emacs\\.d/elpa/"))
+        recentf-exclude '("Privat" "\\.emacs\\.d/elpa/"))
   (recentf-mode 1))
 
 (use-package multisession
@@ -368,6 +369,7 @@ temporarily making the buffer local value global."
 
 (use-package tramp
   :defer t
+  :functions upower-enable
   :config
   (setq auto-save-file-name-transforms nil ; Never autosave remote files in /tmp on local host
         tramp-persistency-file-name (concat user-cache-directory "tramp")
@@ -692,7 +694,9 @@ temporarily making the buffer local value global."
 
 (use-package ielm
   :defer t
-  :init (setq ielm-prompt "EL> "))
+  :custom
+  (ielm-prompt "EL> ")
+  (ielm-history-file-name (concat user-cache-directory "ielm-history.eld")))
 
 (use-package paren
   :defer 5
@@ -780,6 +784,7 @@ shall not be autoloaded before org-switchb is invoked.")
                         (dolist (buf (org-buffer-list 'files))
                           (kill-buffer buf)))))
   :hook (org-mode . visual-line-mode)
+  :functions (org-switchb--preload-some-org-buffers org-revisit-remote-org-files find-lisp-find-files)
   :config
   (setq
    org-agenda-files (list org-default-notes-file
@@ -903,7 +908,7 @@ shall not be autoloaded before org-switchb is invoked.")
 
   (advice-add 'org-switchb :before #'org-switchb--preload-some-org-buffers)
 
-  (advice-add 'org-switchb :around (lambda(orig-fun &rest args)
+  (advice-add 'org-switchb :around #'(lambda(orig-fun &rest args)
                                      "Ignore case for Org buffer completion with org-switchb"
                                       (let ((completion-ignore-case t))
                                         (apply orig-fun args))))
