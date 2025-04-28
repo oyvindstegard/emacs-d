@@ -895,16 +895,20 @@ shall not be autoloaded before org-switchb is invoked.")
           (message "Loading org file %s ...done" (car org-files)))
 	    (setq org-files (cdr org-files)))))
 
+  (setq org-revisit-remote-org-files-running nil)
   (defun org-revisit-remote-org-files ()
     "Revisits all opened org-files that are remote, e.g. /ssh:..."
     (let* ((use-dialog-box nil)
            (remote_orgbuffers (seq-filter (lambda(b) (string-match "^/ssh:" (or (buffer-file-name b) ""))) (org-buffer-list 'files t)))
            (orgfiles (mapcar (lambda(b) (buffer-file-name b)) remote_orgbuffers)))
-      (when orgfiles
-        (message "Revisiting %d remote org file(s)..." (length orgfiles)))
-      (dolist (orgfile orgfiles) (find-file-noselect orgfile))
-      (when orgfiles
-        (message "Revisiting %d remote org file(s)...done" (length orgfiles)))))
+      (when (and orgfiles (not org-revisit-remote-org-files-running))
+        (unwind-protect
+            (progn
+              (setq org-revisit-remote-org-files-running t)
+              (message "Revisiting %d remote org file(s)..." (length orgfiles))
+              (dolist (orgfile orgfiles) (find-file-noselect orgfile))
+              (message "Revisiting %d remote org file(s)...done" (length orgfiles)))
+          (setq org-revisit-remote-org-files-running nil)))))
 
   (advice-add 'org-switchb :before #'org-switchb--preload-some-org-buffers)
 
