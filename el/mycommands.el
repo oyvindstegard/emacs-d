@@ -113,6 +113,11 @@ indentation rules."
   (interactive)
   (base64-encode-region (mark) (point) t))
 
+(defun b64dec (beg end)
+  "Base64-decode region, ignoring any errors with padding."
+  (interactive "r")
+  (base64-decode-region beg end nil t))
+
 (defun tail-view-mode ()
   "Toggle `auto-revert-tail-mode' and `view-mode' for current buffer."
   (interactive)
