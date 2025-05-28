@@ -953,5 +953,5 @@ shall not be autoloaded before org-switchb is invoked.")
 
 ;; local.el
 (when (file-readable-p local-init-file)
-  (load local-init-file)
+  (load (string-remove-suffix ".el" local-init-file))
   (run-hooks 'local-init-file-after-hook))
