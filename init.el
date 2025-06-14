@@ -130,7 +130,7 @@
       large-file-warning-threshold 104857600
       message-log-max 10000
       backup-by-copying t
-      backup-enable-predicate #'(lambda(name) nil) ; default to backups off
+      backup-enable-predicate #'(lambda(_abspath) nil) ; default to backups off
       uniquify-buffer-name-style 'forward
       require-final-newline nil
       sentence-end-double-space nil
@@ -264,7 +264,7 @@
         dired-hide-details-hide-symlink-targets nil)
   (put 'dired-find-alternate-file 'disabled nil)
   (defun dired-xdg-open()
-    "In dired, open the file named on this line with external command 'xdg-open'."
+    "In dired, open the file named on this line with external command `xdg-open'."
     (interactive)
     (let* ((file (dired-get-filename nil t))
            (process-connection-type t)) ; set to `pipe` if xdg-open does not work
@@ -314,30 +314,32 @@
         (concat comint-password-prompt-regexp
                 "\\|^\\(SSH\\|SUDO\\|BECOME\\) password:\\s *\\'"))
 
-  (defadvice comint-read-input-ring (around comint-read-input-ring-AROUND activate)
+  (defun comint-read-input-ring--oyvind/around (orig-fun &rest args)
     "Make `comint-read-input-ring' work when variable
 `comint-input-ring-separator' has buffer local value, by
 temporarily making the buffer local value global."
     (let ((current-val comint-input-ring-separator)
-	  global-val)
+	      global-val)
       (if (local-variable-p 'comint-input-ring-separator)
-	  (progn
-	    (kill-local-variable 'comint-input-ring-separator)
-	    (setq global-val comint-input-ring-separator)
-	    (setq comint-input-ring-separator current-val)
-	    (unwind-protect ad-do-it
-	      (setq comint-input-ring-separator global-val))
-	    (setq-local comint-input-ring-separator current-val))
-	ad-do-it)))
+	      (progn
+	        (kill-local-variable 'comint-input-ring-separator)
+	        (setq global-val comint-input-ring-separator)
+	        (setq comint-input-ring-separator current-val)
+	        (unwind-protect (apply orig-fun args)
+	          (setq comint-input-ring-separator global-val))
+	        (setq-local comint-input-ring-separator current-val))
+	    (apply orig-fun args))))
+  (advice-add 'comint-read-input-ring :around #'comint-read-input-ring--oyvind/around)
 
-  (defadvice comint-write-input-ring (around comint-write-input-ring-AROUND activate)
+  (defun comint-write-input-ring--oyvind/around (orig-fun &rest args)
     "Make `comint-write-input-ring' use buffer local value of
 `comint-input-ring-separator' if present."
     (let ((history-buf (get-buffer-create " *Temp Input History*"))
-	  (separator comint-input-ring-separator))
+	      (separator comint-input-ring-separator))
       (with-current-buffer history-buf
-	(setq-local comint-input-ring-separator separator)))
-    ad-do-it))
+	    (setq-local comint-input-ring-separator separator)))
+    (apply orig-fun args))
+  (advice-add 'comint-write-input-ring :around #'comint-write-input-ring--oyvind/around))
 
 (use-package shell
   :commands (shell)
@@ -584,7 +586,7 @@ temporarily making the buffer local value global."
   (setq project-list-file (concat user-cache-directory "projects"))
   (defun project-magit-status () (interactive)
          (let ((default-directory (project-root (project-current t))))
-           (magit-status)))
+           (magit-status-setup-buffer)))
   (defun project-neotree-show () (interactive)
          (let ((default-directory (project-root (project-current t))))
            (neotree-show)))
@@ -623,8 +625,9 @@ temporarily making the buffer local value global."
         projectile-known-projects-file (concat user-cache-directory "projectile-bookmarks.eld"))
   :config
   (projectile-mode 1)
-  (defadvice projectile-project-root (around ignore-remote first activate)
-    (unless (file-remote-p default-directory) ad-do-it))
+  (defun projectile-project-root--oyvind/around (orig-fun &rest args)
+    (unless (file-remote-p default-directory) (apply orig-fun args)))
+  (advice-add 'projectile-project-root :around #'projectile-project-root--oyvind/around)
   (push "jabber-.*" projectile-globally-ignored-modes)
   (push "rcirc" projectile-globally-ignored-modes)
   (setq projectile-switch-project-action 'neotree-projectile-action
@@ -795,7 +798,7 @@ shall not be autoloaded before org-switchb is invoked.")
    org-indent-mode-turns-on-hiding-stars nil
    org-startup-indented t
    org-odd-levels-only nil
-   org-catch-invisible-edits 'show-and-error
+   org-fold-catch-invisible-edits 'show-and-error
    org-agenda-skip-scheduled-if-done t
    org-agenda-skip-deadline-if-done t
    org-agenda-skip-timestamp-if-done t
@@ -864,7 +867,7 @@ shall not be autoloaded before org-switchb is invoked.")
 
   (bind-key "C-<delete>" 'org-table-blank-field org-mode-map)
 
-  (defun org-switchb--preload-some-org-buffers (&rest args)
+  (defun org-switchb--preload-some-org-buffers (&rest _args)
     "Preload some well known Org files into buffers."
     (require 'find-lisp)
     (let ((org-paths
