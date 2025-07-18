@@ -660,7 +660,7 @@ temporarily making the buffer local value global."
          ("C-x M-g" . magit-dispatch))
   :hook ((git-commit-mode . turn-on-auto-fill)
 	 (git-commit-mode . flyspell-mode)
-	 (git-commit-mode . (lambda() (setq ispell-local-dictionary "en"))))
+	 (git-commit-mode . (lambda() (ispell-change-dictionary "en"))))
   :config
   (add-to-list 'display-buffer-alist
                  '(".*COMMIT_EDITMSG". ((display-buffer-pop-up-window) .
