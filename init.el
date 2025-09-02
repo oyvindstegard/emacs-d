@@ -319,31 +319,33 @@
         (concat comint-password-prompt-regexp
                 "\\|^\\(SSH\\|SUDO\\|BECOME\\) password:\\s *\\'"))
 
-  (defun comint-read-input-ring--oyvind/around (orig-fun &rest args)
-    "Make `comint-read-input-ring' work when variable
+  (eval-when-compile
+    (defun comint-read-input-ring--oyvind/around (orig-fun &rest args)
+      "Make `comint-read-input-ring' work when variable
 `comint-input-ring-separator' has buffer local value, by
 temporarily making the buffer local value global."
-    (let ((current-val comint-input-ring-separator)
-	      global-val)
-      (if (local-variable-p 'comint-input-ring-separator)
-	      (progn
-	        (kill-local-variable 'comint-input-ring-separator)
-	        (setq global-val comint-input-ring-separator)
-	        (setq comint-input-ring-separator current-val)
-	        (unwind-protect (apply orig-fun args)
-	          (setq comint-input-ring-separator global-val))
-	        (setq-local comint-input-ring-separator current-val))
-	    (apply orig-fun args))))
+      (let ((current-val comint-input-ring-separator)
+	        global-val)
+        (if (local-variable-p 'comint-input-ring-separator)
+	        (progn
+	          (kill-local-variable 'comint-input-ring-separator)
+	          (setq global-val comint-input-ring-separator)
+	          (setq comint-input-ring-separator current-val)
+	          (unwind-protect (apply orig-fun args)
+	            (setq comint-input-ring-separator global-val))
+	          (setq-local comint-input-ring-separator current-val))
+	      (apply orig-fun args)))))
   (advice-add 'comint-read-input-ring :around #'comint-read-input-ring--oyvind/around)
 
-  (defun comint-write-input-ring--oyvind/around (orig-fun &rest args)
-    "Make `comint-write-input-ring' use buffer local value of
+  (eval-when-compile
+    (defun comint-write-input-ring--oyvind/around (orig-fun &rest args)
+      "Make `comint-write-input-ring' use buffer local value of
 `comint-input-ring-separator' if present."
-    (let ((history-buf (get-buffer-create " *Temp Input History*"))
-	      (separator comint-input-ring-separator))
-      (with-current-buffer history-buf
-	    (setq-local comint-input-ring-separator separator)))
-    (apply orig-fun args))
+      (let ((history-buf (get-buffer-create " *Temp Input History*"))
+	        (separator comint-input-ring-separator))
+        (with-current-buffer history-buf
+	      (setq-local comint-input-ring-separator separator)))
+      (apply orig-fun args)))
   (advice-add 'comint-write-input-ring :around #'comint-write-input-ring--oyvind/around))
 
 (use-package shell
