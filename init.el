@@ -178,6 +178,11 @@
         recentf-exclude '("Privat" "\\.emacs\\.d/elpa/"))
   (recentf-mode 1))
 
+(use-package grep
+  :defer t
+  :custom
+  (grep-find-use-xargs 'gnu))
+
 (use-package multisession
   :if (e29-p)
   :defer t
