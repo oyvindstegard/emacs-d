@@ -48,6 +48,11 @@
 (add-hook 'server-after-make-frame-hook 'oyvind/setup-visuals)
 (add-hook 'server-after-make-frame-hook (lambda() (select-frame-set-input-focus (selected-frame))))
 
+;; A little notification when async native compilation finishes operations.
+(when (and (functionp 'native-comp-available-p) (native-comp-available-p))
+  (add-hook 'native-comp-async-all-done-hook
+            (lambda () (message "Native compilation has completed current operations."))))
+
 ;; Boot strap package and use-package
 (package-initialize) ; early-init.el sets `package-enable-at-startup' to nil
 (unless package-archive-contents
