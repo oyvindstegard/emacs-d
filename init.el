@@ -224,7 +224,10 @@
   :bind
   (("C-c n" . show-buffer-file-name)
    ("C-x 4 k" . kill-buffer-other-window)
-   ("C-c C-<return>" . window-dedicated-toggle))
+   ("C-c C-<left>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . left)))))
+   ("C-c C-<right>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . right)))))
+   ("C-c C-<down>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . bottom)))))
+   ("C-c C-<up>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . top))))))
   :commands (unfill-region
 	         extract-regexp-occurences
              insert-date-string
@@ -679,10 +682,8 @@ temporarily making the buffer local value global."
                                         ((inhibit-same-window . t)))))
   (setq magit-last-seen-setup-instructions "1.4.0"
 	magit-repository-directories '(("~/Prosjekter" . 1) ("~/dev" . 1) ("~/.emacs.d" . 0))
-    magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
-  ;; TODO this option no longer exists in recent Magit versions, find out how to set it:
-  ;(push "-x" magit-cherry-pick-arguments)
-  )
+    magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1
+    magit-bury-buffer-function 'magit-restore-window-configuration))
 
 (use-package sql
   :defer t
