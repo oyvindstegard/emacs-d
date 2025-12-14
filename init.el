@@ -224,10 +224,10 @@
   :bind
   (("C-c n" . show-buffer-file-name)
    ("C-x 4 k" . kill-buffer-other-window)
-   ("C-c C-<left>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . left)))))
-   ("C-c C-<right>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . right)))))
-   ("C-c C-<down>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . bottom)))))
-   ("C-c C-<up>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . top))))))
+   ("C-c C-<return> <left>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . left)))))
+   ("C-c C-<return> <right>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . right)))))
+   ("C-c C-<return> <down>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . bottom)))))
+   ("C-c C-<return> <up>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . top))))))
   :commands (unfill-region
 	         extract-regexp-occurences
              insert-date-string
