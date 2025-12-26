@@ -51,7 +51,12 @@
 ;; A little notification when async native compilation finishes operations.
 (when (and (functionp 'native-comp-available-p) (native-comp-available-p))
   (add-hook 'native-comp-async-all-done-hook
-            (lambda () (message "Native compilation has completed current operations."))))
+            (lambda ()
+              (if (get-buffer-window "*Warnings*")
+                  (progn
+                    (delete-window (get-buffer-window "*Warnings*"))
+                    (message "Native compilation has completed current operations (*Warnings* logged)."))
+                (message "Native compilation has completed current operations.")))))
 
 ;; Boot strap package and use-package
 (package-initialize) ; early-init.el sets `package-enable-at-startup' to nil
