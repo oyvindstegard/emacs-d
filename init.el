@@ -60,7 +60,9 @@
 
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-(require 'use-package)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(eval-when-compile (require 'use-package))
 
 ;; General Emacs Preferences
 (if (e28-p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"

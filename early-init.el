@@ -21,8 +21,7 @@
 `user-emacs-directory'.")
 (defvar local-init-file (concat user-emacs-directory "local.el")
   "Optional local Emacs configuration that varies per
-host/installation. Loaded as last step after all other
-intialization.")
+host/installation. Loaded as last step after all other intialization.")
 (defvar local-init-file-after-hook nil
   "Hooks run after any `local-init-file' has been loaded.")
 
