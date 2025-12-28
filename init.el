@@ -241,7 +241,9 @@
              xml-pretty-print-region
              uniquify-region
              base64-encode-region-no-break
-             tail-view-mode))
+             b64dec
+             tail-view-mode
+             side-show))
 
 (use-package winner
   :defer 2

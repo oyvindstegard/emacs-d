@@ -42,14 +42,18 @@ buffer or not."
   "Move a buffer to a side window, select the window."
   (interactive)
   (setq side (or side 'left))
-  (let ((buffer (or (if (stringp buffer-or-name) (get-buffer-create buffer-or-name) buffer-or-name)
-                    (current-buffer))))
-    (let ((window (get-buffer-window buffer))
-          (side-window (display-buffer-in-side-window buffer (list (cons 'side side)))))
-      (when (and window side-window (not (eq window side-window)) (eq buffer (window-buffer window)))
-        (switch-to-prev-buffer window))
-      (when side-window
-        (select-window side-window)))))
+  (let* ((buffer (or (if (stringp buffer-or-name) (get-buffer-create buffer-or-name) buffer-or-name)
+                     (current-buffer)))
+         (window (get-buffer-window buffer))
+         (side-window (display-buffer-in-side-window buffer (list (cons 'side side)))))
+    (when (and window side-window (not (eq window side-window)) (eq buffer (window-buffer window)))
+      (switch-to-prev-buffer window))
+    (when side-window
+      (select-window side-window)
+      (add-hook 'kill-buffer-hook
+                (lambda()
+                  (when (window-live-p side-window) (delete-window side-window)))
+                nil t))))
 
 (defun unfill-region (start end)
   "Unfills region into one line."
