@@ -1,3 +1,4 @@
+;; -*- mode: emacs-lisp; lexical-binding: t; -*-
 ;; Misc interactive functions (commands)
 
 (defun insert-date-string (time)
@@ -7,15 +8,16 @@ time as well. Format: %Y-%m-%d [%H:%M]."
   (insert (if time (format-time-string "%Y-%m-%d %H:%M")
             (format-time-string "%Y-%m-%d"))))
 
-(defun show-buffer-file-name()
-  "Shows the complete path and name of the file that the current buffer is visiting."
+(defun show-buffer-file-name ()
+  "Shows the complete path and name of the file that the current buffer is
+visiting."
   (interactive)
   (let ((minibuffer-message-timeout 10))
     (minibuffer-message (or (buffer-file-name) "No file for current buffer."))))
 
 (defun kill-buffer-other-window (arg)
-"Kill the buffer in the other window, and make the current buffer full size.
- If no other window, kills current buffer."
+  "Kill the buffer in the other window, and make the current buffer full
+size. If no other window, kills current buffer."
   (interactive "p")
   (let ((buf (save-window-excursion
                (other-window arg)
@@ -39,15 +41,15 @@ buffer or not."
 (defun side-show (&optional buffer-or-name side)
   "Move a buffer to a side window, select the window."
   (interactive)
-  (setq buffer (or (if (stringp buffer-or-name) (get-buffer-create buffer-or-name) buffer-or-name)
-                   (current-buffer)))
   (setq side (or side 'left))
-  (let ((window (get-buffer-window buffer))
-        (side-window (display-buffer-in-side-window buffer (list (cons 'side side)))))
-    (when (and window side-window (not (eq window side-window)) (eq buffer (window-buffer window)))
-      (switch-to-prev-buffer window))
-    (when side-window
-      (select-window side-window))))
+  (let ((buffer (or (if (stringp buffer-or-name) (get-buffer-create buffer-or-name) buffer-or-name)
+                    (current-buffer))))
+    (let ((window (get-buffer-window buffer))
+          (side-window (display-buffer-in-side-window buffer (list (cons 'side side)))))
+      (when (and window side-window (not (eq window side-window)) (eq buffer (window-buffer window)))
+        (switch-to-prev-buffer window))
+      (when side-window
+        (select-window side-window)))))
 
 (defun unfill-region (start end)
   "Unfills region into one line."
@@ -61,12 +63,12 @@ buffer or not."
           (replace-match "\n"))))))
 
 (defun extract-regexp-occurrences (regexp)
-  "Extract all occurrences of a regular expression REGEXP in the current buffer.
-Put result into a new buffer, each occurrence on its own line.
+  "Extract all occurrences of a regular expression REGEXP in the current
+buffer. Put result into a new buffer, each occurrence on its own line.
 
-A regexp group can be specified via numeric prefix argument. The group is
-selected for extraction. Default is to extract all occurrences of the entire regular
-expression (group 0)."
+A regexp group can be specified via numeric prefix argument. The group
+is selected for extraction. Default is to extract all occurrences of the
+entire regular expression (group 0)."
   (interactive
    (list (read-regexp "Regexp")))
   (let ((group (if current-prefix-arg (prefix-numeric-value current-prefix-arg) 0))
@@ -112,10 +114,11 @@ indentation rules."
     (insert output)))
 
 (defun uniquify-region ()
-  "Remove duplicate adjacent lines in the given region, like unix command 'uniq'."
+  "Remove duplicate adjacent lines in the given region, like unix command
+`uniq'."
   (interactive)
   (narrow-to-region (region-beginning) (region-end))
-  (beginning-of-buffer)
+  (goto-char (point-min))
   (while (re-search-forward "\\(.*\n\\)\\1+" nil t)
     (replace-match "\\1" nil nil))
   (widen)
@@ -134,6 +137,7 @@ indentation rules."
 (defun tail-view-mode ()
   "Toggle `auto-revert-tail-mode' and `view-mode' for current buffer."
   (interactive)
+  (eval-when-compile (require 'autorevert))
   (call-interactively 'auto-revert-tail-mode)
   (if auto-revert-tail-mode
       (progn (goto-char (point-max)) (view-mode 1) (message "Auto revert tail mode and view mode enabled."))
