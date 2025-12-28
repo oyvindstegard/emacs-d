@@ -36,6 +36,19 @@ buffer or not."
         (set-window-dedicated-p window t)
         (message "Window dedicated: %s" window)))))
 
+(defun side-show (&optional buffer-or-name side)
+  "Move a buffer to a side window, select the window."
+  (interactive)
+  (setq buffer (or (if (stringp buffer-or-name) (get-buffer-create buffer-or-name) buffer-or-name)
+                   (current-buffer)))
+  (setq side (or side 'left))
+  (let ((window (get-buffer-window buffer))
+        (side-window (display-buffer-in-side-window buffer (list (cons 'side side)))))
+    (when (and window side-window (not (eq window side-window)) (eq buffer (window-buffer window)))
+      (switch-to-prev-buffer window))
+    (when side-window
+      (select-window side-window))))
+
 (defun unfill-region (start end)
   "Unfills region into one line."
   (interactive "r")

@@ -231,10 +231,10 @@
   :bind
   (("C-c n" . show-buffer-file-name)
    ("C-x 4 k" . kill-buffer-other-window)
-   ("C-c C-<return> <left>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . left)))))
-   ("C-c C-<return> <right>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . right)))))
-   ("C-c C-<return> <down>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . bottom)))))
-   ("C-c C-<return> <up>" . (lambda() (interactive) (display-buffer-in-side-window (current-buffer) '((side . top))))))
+   ("C-c C-<return> <left>" . (lambda() (interactive) (side-show (current-buffer) 'left)))
+   ("C-c C-<return> <right>" . (lambda() (interactive) (side-show (current-buffer) 'right)))
+   ("C-c C-<return> <down>" . (lambda() (interactive) (side-show (current-buffer) 'bottom)))
+   ("C-c C-<return> <up>" . (lambda() (interactive) (side-show (current-buffer) 'top))))
   :commands (unfill-region
 	         extract-regexp-occurences
              insert-date-string
@@ -334,7 +334,7 @@
         (concat comint-password-prompt-regexp
                 "\\|^\\(SSH\\|SUDO\\|BECOME\\) password:\\s *\\'"))
 
-  (eval-when-compile
+  (eval-and-compile
     (defun comint-read-input-ring--oyvind/around (orig-fun &rest args)
       "Make `comint-read-input-ring' work when variable
 `comint-input-ring-separator' has buffer local value, by
@@ -352,7 +352,7 @@ temporarily making the buffer local value global."
 	      (apply orig-fun args)))))
   (advice-add 'comint-read-input-ring :around #'comint-read-input-ring--oyvind/around)
 
-  (eval-when-compile
+  (eval-and-compile
     (defun comint-write-input-ring--oyvind/around (orig-fun &rest args)
       "Make `comint-write-input-ring' use buffer local value of
 `comint-input-ring-separator' if present."
