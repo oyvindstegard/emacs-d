@@ -31,19 +31,12 @@
   (set-face-foreground 'lazy-highlight "#ccc")
   (set-face-foreground 'font-lock-comment-face "#cdad00")
 
-  (let ((x-fontname (if (ubuntu-p) "Ubuntu Mono" "Monospace"))
-        (w32-fontname "Consolas 10"))
+  ;; Font on Win32
+  (when (and (display-graphic-p) (eq system-type 'windows-nt))
+    (set-face-font 'fixed-pitch "Consolas 10")
     (setq window-system-default-frame-alist
-          (list
-           (cons 'pgtk (list (cons 'font x-fontname)))
-           (cons 'x (list (cons 'font x-fontname)))
-           (cons 'w32 (list (cons 'font w32-fontname)))))
-    ;; Reset fixed pitch font, which is sometimes wrong if Emacs has been
-    ;; started as daemon initially
-    (when (display-graphic-p)
-      (cond
-       ((eq system-type 'windows-nt) (set-face-font 'fixed-pitch w32-fontname))
-       ((eq system-type 'gnu/linux) (set-face-font 'fixed-pitch x-fontname))))))
+          (list (cons 'w32 (list (cons 'font "Consolas 10")))))))
+
 (oyvind/setup-visuals)
 (add-hook 'server-after-make-frame-hook 'oyvind/setup-visuals)
 (add-hook 'server-after-make-frame-hook (lambda() (select-frame-set-input-focus (selected-frame))))
