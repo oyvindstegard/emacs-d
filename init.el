@@ -392,7 +392,6 @@ temporarily making the buffer local value global."
   :config
   (setq auto-save-file-name-transforms nil ; Never autosave remote files in /tmp on local host
         tramp-persistency-file-name (concat user-cache-directory "tramp")
-        tramp-use-scp-direct-remote-copying t
         tramp-copy-size-limit (* 1024 1024)
         tramp-verbose 1)
   (when (and (ubuntu-p) (not (wsl-p)))
