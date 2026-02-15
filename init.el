@@ -969,6 +969,15 @@ shall not be autoloaded before org-switchb is invoked.")
 (use-package tod
   :after org)
 
+(use-package org-re-reveal
+  :ensure t
+  :after org
+  :custom
+  (org-re-reveal-revealjs-version "4")
+  (org-re-reveal-extra-options "hash: true")
+  (org-re-reveal-no-htmlize-src t)
+  (org-re-reveal-plugins '(notes search zoom highlight)))
+
 ;; custom.el
 (when (file-readable-p custom-file) (load custom-file))
 
