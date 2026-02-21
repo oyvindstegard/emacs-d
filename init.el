@@ -602,6 +602,7 @@ temporarily making the buffer local value global."
   :commands (restclient-mode)
   :mode ("\\.restclient\\'" . restclient-mode)
   :hook (restclient-mode . (lambda() (set (make-local-variable 'js-indent-level) 2)))
+  :config (setf (cdr (assoc "application/json" restclient-content-type-modes)) 'json-mode)
   :bind (:map restclient-mode-map ("C-c C-f" . json-mode-beautify)))
 
 
