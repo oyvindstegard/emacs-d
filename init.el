@@ -65,6 +65,10 @@
 ;; General Emacs Preferences
 (if (e28-p) (setq use-short-answers t) (fset 'yes-or-no-p 'y-or-n-p))  ; Write "y" instead of "yes <RET>"
 
+;; Evaluate if I like this:
+(fido-vertical-mode)
+
+
 ;; init file management
 (defun oyvind/ask-byte-recompile-init-file ()
   (interactive)
@@ -419,6 +423,10 @@ temporarily making the buffer local value global."
 
 (use-package multiple-cursors
   :defer t
+  :bind (("C-S-c C-S-c" . 'mc/edit-lines)
+         ("C->" . 'mc/mark-next-like-this)
+         ("C-<" . 'mc/mark-previous-like-this)
+         ("C-c C-<" . 'mc/mark-all-like-this))
   :custom (mc/list-file (concat user-cache-directory "mc-lists.el")))
 
 (use-package expand-region
