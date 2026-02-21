@@ -445,6 +445,7 @@ temporarily making the buffer local value global."
 (use-package markdown-mode
   :ensure t
   :defer t
+  :custom-face (markdown-code-face ((t (:inherit (monospace)))))
   :config
   (setq markdown-asymmetric-header t)
   (push '("js" . js-mode) markdown-code-lang-modes)

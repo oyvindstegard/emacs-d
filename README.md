@@ -2,7 +2,7 @@
 
 Author: Øyvind Stegard <oyvind@stegard.net>
 
-Compatibility: GNU/Emacs 27.X, 28.X, 29.X, primarily for graphical Linux
+Compatibility: GNU/Emacs 27.X, 28.X, 29.X, 30.X, primarily for graphical Linux
 environment, but also used for plain terminal Emacs on WSL/Windows.
 
 Utilizes `use-package`, the Emacs package framework and avoids the customize
@@ -12,8 +12,8 @@ files. Any state saved by the Emacs customize framework is stored in
 specific configuration.
 
 In general, the configuration should boot strap Emacs by automatically
-downloading and byte compiling any packages missing, so the first startup can
-take some time.
+downloading and compiling any packages missing, so the first startup can take
+some time.
 
 ## Cache directory
 
